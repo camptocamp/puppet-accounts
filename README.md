@@ -94,6 +94,6 @@ accounts::users:
     public_keys:
       - bar
     system: true
-  baz
+  baz:
     ensure: absent
 ```
