@@ -76,4 +76,24 @@ accounts::public_keys:
   baz:
     type: ssh-rsa
     key: BAZ-S-RSA-PUBLIC-KEY
+accounts::users:
+  foo:
+    groups:
+      - foo
+    uid: 1000
+    public_keys:
+      - foo
+      - bar
+      - baz
+  bar:
+    groups:
+      - foo
+      - bar
+      - baz
+    uid: 1001
+    public_keys:
+      - bar
+    system: true
+  baz
+    ensure: absent
 ```

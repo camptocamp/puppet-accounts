@@ -41,6 +41,11 @@ describe 'accounts' do
   context 'with users' do
     let(:params) do
       {
+        :groups => {
+          'foo' => {},
+          'bar' => {},
+          'baz' => {},
+        },
         :public_keys => {
           'foo' => {
             'type' => 'ssh-rsa',
@@ -57,10 +62,12 @@ describe 'accounts' do
         },
         :users => {
           'foo' => {
+            'groups'      => [ 'foo', ],
             'uid'         => 1000,
             'public_keys' => [ 'foo', 'bar', 'baz', ],
           },
           'bar' => {
+            'groups'      => [ 'foo', 'bar', 'baz', ],
             'uid'         => 1001,
             'public_keys' => [ 'bar', ],
           },
@@ -70,6 +77,7 @@ describe 'accounts' do
     it { should compile.with_all_deps }
 
     it { should contain_user('foo') }
+    it { should contain_group('foo') }
     it { should contain_ssh_authorized_key('foo-on-foo').with({
       :ensure => :present,
     }) }
@@ -81,6 +89,9 @@ describe 'accounts' do
     }) }
     
     it { should contain_user('bar') }
+    it { should contain_group('foo') }
+    it { should contain_group('bar') }
+    it { should contain_group('baz') }
     it { should contain_ssh_authorized_key('foo-on-bar').with({
       :ensure => :absent,
     }) }
