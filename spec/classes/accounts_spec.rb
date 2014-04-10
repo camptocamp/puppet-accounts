@@ -29,36 +29,21 @@ describe 'accounts' do
             'key'  => 'FOO-S-RSA-PUBLIC-KEY',
           },
           'bar' => {
-            'type' => 'ssh-rsa',
-            'key'  => 'BAR-S-RSA-PUBLIC-KEY',
+            'ensure' => 'absent',
+            'type'   => 'ssh-rsa',
+            'key'    => 'BAR-S-RSA-PUBLIC-KEY',
           },
         },
       }
     end
     it { should compile.with_all_deps }
+    it { should have_ssh_authorized_key_resource_count(0) }
+    it { should have_user_resource_count(0) }
   end
 
-  context 'without accounts' do
+  context 'with users' do
     let(:params) do
       {
-        :public_keys => {
-          'foo' => {
-            'type' => 'ssh-rsa',
-            'key'  => 'FOO-S-RSA-PUBLIC-KEY',
-          },
-          'bar' => {
-            'type' => 'ssh-rsa',
-            'key'  => 'BAR-S-RSA-PUBLIC-KEY',
-          },
-          'baz' => {
-            'type' => 'ssh-rsa',
-            'key'  => 'BAZ-S-RSA-PUBLIC-KEY',
-          },
-          'quux' => {
-            'type' => 'ssh-rsa',
-            'key'  => 'QUUX-S-RSA-PUBLIC-KEY',
-          },
-        },
         :users => {
           'foo' => {
             'groups'          => [ 'foo', ],
@@ -76,6 +61,7 @@ describe 'accounts' do
             'authorized_keys' => [ 'baz', ],
           },
           'quux' => {
+            'ensure' => 'absent',
             'groups' => [ 'quux', ],
             'uid'    => 1003,
           },
@@ -84,8 +70,10 @@ describe 'accounts' do
     end
     it { should compile.with_all_deps }
 
-    it { should have_user_resource_count(0) }
-    it { should have_authorized_key_resource_count(0) }
+    it { should have_ssh_authorized_key_resource_count(0) }
+
+    it { should have_user_resource_count(1) }
+    it { should contain_user('quux').with({ :ensure => :absent })}
   end
 
   context 'with accounts' do
@@ -124,8 +112,10 @@ describe 'accounts' do
             'uid'             => 1002,
           },
           'quux' => {
+            'ensure' => 'absent',
             'groups' => [ 'quux', ],
             'uid'    => 1003,
+            'authorized_keys' => [ 'bar', 'baz', ],
           },
         },
 	:accounts => [ 'foo', 'bar', ],
@@ -133,44 +123,29 @@ describe 'accounts' do
     end
     it { should compile.with_all_deps }
 
-    it { should have_ssh_authorized_key_resource_count(8) }
-
+    it { should have_user_resource_count(3) }
     it { should contain_user('foo').with({
       :groups => [ 'foo' ],
       :uid    => 1000,
     }) }
-    it { should contain_ssh_authorized_key('foo-on-foo').with({
-      :ensure => :present,
-    }) }
-    it { should contain_ssh_authorized_key('bar-on-foo').with({
-      :ensure => :present,
-    }) }
-    it { should contain_ssh_authorized_key('baz-on-foo').with({
-      :ensure => :present,
-    }) }
-    it { should contain_ssh_authorized_key('quux-on-foo').with({
-      :ensure => :absent,
-    }) }
-
     it { should contain_user('bar').with({
       :groups => [ 'foo', 'bar', 'baz', ],
       :uid    => 1001,
     }) }
-    it { should contain_ssh_authorized_key('foo-on-bar').with({
+    it { should contain_user('quux').with({
       :ensure => :absent,
     }) }
-    it { should contain_ssh_authorized_key('bar-on-bar').with({
-      :ensure => :present,
-    }) }
-    it { should contain_ssh_authorized_key('baz-on-bar').with({
-      :ensure => :absent,
-    }) }
-    it { should contain_ssh_authorized_key('quux-on-bar').with({
-      :ensure => :absent,
-    }) }
-
     it { should_not contain_user('baz') }
-    it { should_not contain_user('quux') }
+
+    it { should have_ssh_authorized_key_resource_count(6) }
+
+    it { should contain_ssh_authorized_key('foo-on-foo').with({ :ensure => :present, }) }
+    it { should contain_ssh_authorized_key('bar-on-foo').with({ :ensure => :present, }) }
+    it { should contain_ssh_authorized_key('baz-on-foo').with({ :ensure => :present, }) }
+    it { should contain_ssh_authorized_key('quux-on-foo').with({ :ensure => :absent, }) }
+
+    it { should contain_ssh_authorized_key('bar-on-bar').with({ :ensure => :present, }) }
+    it { should contain_ssh_authorized_key('quux-on-bar').with({ :ensure => :absent, }) }
 
   end
 

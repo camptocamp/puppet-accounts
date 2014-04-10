@@ -4,14 +4,8 @@ define accounts::authorized_key(
 ) {
   validate_hash($::accounts::public_keys)
 
-  if $public_key in flatten([$::accounts::users[$user]['authorized_keys'], $user]) {
-    $ensure = present
-  } else {
-    $ensure = absent
-  }
-
   ssh_authorized_key { "${public_key}-on-${user}":
-    ensure => $ensure,
+    ensure => present,
     user   => $user,
     type   => $::accounts::public_keys[$public_key]['type'],
     key    => $::accounts::public_keys[$public_key]['key'],
