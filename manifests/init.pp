@@ -2,7 +2,8 @@ class accounts(
   $groups      = {},
   $public_keys = {},
   $users       = {},
+  $accounts    = [],
 ) {
   create_resources(group, $groups)
-  create_resources(accounts::user, $users)
+  accounts::account { $accounts: }
 }
