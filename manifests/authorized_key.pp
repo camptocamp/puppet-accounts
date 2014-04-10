@@ -4,7 +4,7 @@ define accounts::authorized_key(
 ) {
   validate_hash($::accounts::public_keys)
 
-  if $public_key in $::accounts::users[$user]['authorized_keys'] {
+  if $public_key in flatten([$::accounts::users[$user]['authorized_keys'], $user]) {
     $ensure = present
   } else {
     $ensure = absent

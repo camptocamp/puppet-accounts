@@ -113,17 +113,15 @@ describe 'accounts' do
           'foo' => {
             'groups'          => [ 'foo', ],
             'uid'             => 1000,
-            'authorized_keys' => [ 'foo', 'bar', 'baz', ],
+            'authorized_keys' => [ 'bar', 'baz', ],
           },
           'bar' => {
             'groups'          => [ 'foo', 'bar', 'baz', ],
             'uid'             => 1001,
-            'authorized_keys' => [ 'bar', ],
           },
           'baz' => {
             'groups'          => [ 'baz', ],
             'uid'             => 1002,
-            'authorized_keys' => [ 'baz', ],
           },
           'quux' => {
             'groups' => [ 'quux', ],
