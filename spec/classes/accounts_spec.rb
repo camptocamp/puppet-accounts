@@ -275,6 +275,148 @@ describe 'accounts' do
     it { should contain_user('foo') }
   end
 
+  context 'when adding a user group' do
+    let(:params) do
+      {
+        :public_keys => {
+          'foo' => {
+            'type'   => 'ssh-rsa',
+            'key'    => 'FOO-S-RSA-PUBLIC-KEY',
+          },
+          'bar' => {
+            'type'   => 'ssh-rsa',
+            'key'    => 'BAR-S-RSA-PUBLIC-KEY',
+          },
+          'baz' => {
+            'type'   => 'ssh-rsa',
+            'key'    => 'BAZ-S-RSA-PUBLIC-KEY',
+          },
+          'qux' => {
+            'type'   => 'ssh-rsa',
+            'key'    => 'QUX-S-RSA-PUBLIC-KEY',
+          },
+        },
+        :users       => {
+          'foo' => {
+            'comment' => 'Foo User',
+            'uid'     => 1000,
+          },
+          'bar' => {
+            'comment' => 'Bar User',
+            'uid'     => 1001,
+          },
+          'baz' => {
+            'comment' => 'Baz User',
+            'uid'     => 1002,
+          },
+          'qux' => {
+            'comment' => 'Qux User',
+            'uid'     => 1003,
+          },
+        },
+        :usergroups  => {
+          'foo' => [ 'foo', 'baz', ],
+          'bar' => [ 'bar', 'qux', ],
+        },
+        :accounts    => {
+          '@foo' => {
+            'groups' => [ 'foo', ],
+          },
+          '@bar' => {
+            'groups' => [ 'bar', ],
+          },
+        },
+      }
+    end
+
+    it { should compile.with_all_deps }
+
+    it { should have_group_resource_count(0) }
+
+    it { should have_ssh_authorized_key_resource_count(4) }
+    it { should contain_ssh_authorized_key('foo-on-foo').with({ :ensure => nil }) }
+    it { should contain_ssh_authorized_key('bar-on-bar').with({ :ensure => nil }) }
+    it { should contain_ssh_authorized_key('baz-on-baz').with({ :ensure => nil }) }
+    it { should contain_ssh_authorized_key('qux-on-qux').with({ :ensure => nil }) }
+
+    it { should have_user_resource_count(4) }
+    it { should contain_user('foo').with({ :ensure => nil, :groups => 'foo', }) }
+    it { should contain_user('bar').with({ :ensure => nil, :groups => 'bar', }) }
+    it { should contain_user('baz').with({ :ensure => nil, :groups => 'foo', }) }
+    it { should contain_user('qux').with({ :ensure => nil, :groups => 'bar', }) }
+  end
+
+  context 'when adding a user group with ambiguous groups' do
+    let(:params) do
+      {
+        :public_keys => {
+          'foo' => {
+            'type'   => 'ssh-rsa',
+            'key'    => 'FOO-S-RSA-PUBLIC-KEY',
+          },
+          'bar' => {
+            'type'   => 'ssh-rsa',
+            'key'    => 'BAR-S-RSA-PUBLIC-KEY',
+          },
+          'baz' => {
+            'type'   => 'ssh-rsa',
+            'key'    => 'BAZ-S-RSA-PUBLIC-KEY',
+          },
+          'qux' => {
+            'type'   => 'ssh-rsa',
+            'key'    => 'QUX-S-RSA-PUBLIC-KEY',
+          },
+        },
+        :users       => {
+          'foo' => {
+            'comment' => 'Foo User',
+            'uid'     => 1000,
+          },
+          'bar' => {
+            'comment' => 'Bar User',
+            'uid'     => 1001,
+          },
+          'baz' => {
+            'comment' => 'Baz User',
+            'uid'     => 1002,
+          },
+          'qux' => {
+            'comment' => 'Qux User',
+            'uid'     => 1003,
+          },
+        },
+        :usergroups  => {
+          'foo' => [ 'foo', 'bar', 'baz', ],
+          'bar' => [ 'bar', 'qux', ],
+        },
+        :accounts    => {
+          '@foo' => {
+            'groups' => [ 'foo', ],
+          },
+          '@bar' => {
+            'groups' => [ 'bar', ],
+          },
+        },
+      }
+    end
+
+    it { pending { should compile.with_all_deps } }
+
+    it { pending { should have_group_resource_count(0) } }
+
+    it { pending { should have_ssh_authorized_key_resource_count(4) } }
+    it { pending { should contain_ssh_authorized_key('foo-on-foo').with({ :ensure => nil }) } }
+    it { pending { should contain_ssh_authorized_key('bar-on-bar').with({ :ensure => nil }) } }
+    it { pending { should contain_ssh_authorized_key('baz-on-baz').with({ :ensure => nil }) } }
+    it { pending { should contain_ssh_authorized_key('qux-on-qux').with({ :ensure => nil }) } }
+
+    it { pending { should have_user_resource_count(4) } }
+    it { pending { should contain_user('foo').with({ :ensure => nil, :groups => 'foo', }) } }
+    it { pending { should contain_user('bar').with({ :ensure => nil, :groups => 'bar', }) } }
+    it { pending { should contain_user('baz').with({ :ensure => nil, :groups => 'foo', }) } }
+    it { pending { should contain_user('qux').with({ :ensure => nil, :groups => 'bar', }) } }
+  end
+
   context 'when removing an account' do
     let(:params) do
       {

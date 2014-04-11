@@ -11,6 +11,7 @@ class { 'accounts':
   groups      => hiera_hash('accounts::groups'),
   public_keys => hiera_hash('accounts::public_keys'),
   users       => hiera_hash('accounts::users'),
+  usergroups  => hiera_hash('accounts::usergroups'),
   accounts    => hiera_hash('accounts::accounts'),
 }
 ```
@@ -36,6 +37,17 @@ accounts::users:
   baz:
     # Remove user baz from every node (unless overridden)
     ensure: absent
+  qux:
+    uid: 1003
+    comment: Qux
+
+accounts::usergroups:
+  foo:
+    - foo
+    - bar
+  bar:
+    - baz
+    - qux
 
 # Create foo and bar accounts on every node
 accounts::accounts:
@@ -53,6 +65,9 @@ accounts::accounts:
       - baz
     authorized_keys:
       - bar
+  @foo:
+    groups:
+      - qux
 ```
 
 ### foo.example.com.yaml

@@ -2,6 +2,7 @@ class accounts(
   $groups      = {},
   $public_keys = {},
   $users       = {},
+  $usergroups  = {},
   $accounts    = {},
 ) {
   create_resources(group, $groups)
