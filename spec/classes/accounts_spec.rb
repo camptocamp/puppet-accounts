@@ -417,6 +417,75 @@ describe 'accounts' do
     it { pending { should contain_user('qux').with({ :ensure => nil, :groups => 'bar', }) } }
   end
 
+  context 'when adding a public keys of a user group' do
+    let(:params) do
+      {
+        :public_keys => {
+          'foo' => {
+            'type'   => 'ssh-rsa',
+            'key'    => 'FOO-S-RSA-PUBLIC-KEY',
+          },
+          'bar' => {
+            'type'   => 'ssh-rsa',
+            'key'    => 'BAR-S-RSA-PUBLIC-KEY',
+          },
+          'baz' => {
+            'type'   => 'ssh-rsa',
+            'key'    => 'BAZ-S-RSA-PUBLIC-KEY',
+          },
+          'qux' => {
+            'type'   => 'ssh-rsa',
+            'key'    => 'QUX-S-RSA-PUBLIC-KEY',
+          },
+        },
+        :users       => {
+          'foo' => {
+            'comment' => 'Foo User',
+            'uid'     => 1000,
+          },
+          'bar' => {
+            'comment' => 'Bar User',
+            'uid'     => 1001,
+          },
+          'baz' => {
+            'comment' => 'Baz User',
+            'uid'     => 1002,
+          },
+          'qux' => {
+            'comment' => 'Qux User',
+            'uid'     => 1003,
+          },
+        },
+        :usergroups  => {
+          'foo' => [ 'foo', 'baz', ],
+          'bar' => [ 'bar', 'qux', ],
+        },
+        :accounts    => {
+          'quux' => {
+            'authorized_keys' => [ '@foo', ],
+          },
+          'corge' => {
+            'authorized_keys' => [ '@bar', ],
+          },
+        },
+      }
+    end
+
+    it { should compile.with_all_deps }
+
+    it { should have_group_resource_count(0) }
+
+    it { should have_ssh_authorized_key_resource_count(4) }
+    it { should contain_ssh_authorized_key('foo-on-quux').with({ :ensure => nil }) }
+    it { should contain_ssh_authorized_key('bar-on-corge').with({ :ensure => nil }) }
+    it { should contain_ssh_authorized_key('baz-on-quux').with({ :ensure => nil }) }
+    it { should contain_ssh_authorized_key('qux-on-corge').with({ :ensure => nil }) }
+
+    it { should have_user_resource_count(2) }
+    it { should contain_user('quux').with({ :ensure => nil, }) }
+    it { should contain_user('corge').with({ :ensure => nil, }) }
+  end
+
   context 'when removing an account' do
     let(:params) do
       {

@@ -93,6 +93,8 @@ accounts::accounts:
   baz:
     groups:
       - foo
+    authorized_keys:
+      - @foo
 ```
 
 ### bar.example.com.yaml
