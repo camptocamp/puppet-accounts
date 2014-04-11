@@ -25,11 +25,23 @@ accounts::public_keys:
   bar:
     type: ssh-rsa
     key: BAR-S-RSA-PUBLIC-KEY
+
 accounts::users:
+  foo:
+    uid: 1000
+    comment: Foo
+  bar:
+    uid: 1001
+    comment: Bar
+  baz:
+    # Remove user baz from every node (unless overridden)
+    ensure: absent
+
+# Create foo and bar accounts on every node
+accounts::accounts:
   foo:
     groups:
       - foo
-    uid: 1000
     authorized_keys:
       - foo
       - bar
@@ -39,16 +51,8 @@ accounts::users:
       - foo
       - bar
       - baz
-    uid: 1001
     authorized_keys:
       - bar
-    system: true
-  baz:
-    ensure: absent
-# Create foo and bar accounts on every node
-accounts::accounts:
-  - foo
-  - bar
 ```
 
 ### foo.example.com.yaml
@@ -59,18 +63,21 @@ accounts::groups:
     gid: 1000
   bar:
     system: true
+
 accounts::public_keys:
   baz:
     type: ssh-rsa
     key: BAZ-S-RSA-PUBLIC-KEY
+
 accounts::users:
+  baz:
+    uid: 1002
+
+# Create baz accounts on foo.example.com.yaml only
+accounts::accounts:
   baz:
     groups:
       - foo
-    uid: 1002
-# Create baz accounts on foo.example.com.yaml only
-accounts::accounts:
-  - baz
 ```
 
 ### bar.example.com.yaml
@@ -80,15 +87,17 @@ accounts::public_keys:
   quux:
     type: ssh-rsa
     key: QUUX-S-RSA-PUBLIC-KEY
+
 accounts::users:
+  quux:
+    uid: 1003
+
+# Create quux accounts on bar.example.com.yaml only
+accounts::accounts:
   quux:
     groups:
       - quux
-    uid: 1003
     authorized_keys:
       - quux
       - foo
-# Create quux accounts on bar.example.com.yaml only
-accounts::accounts:
-  - quux
 ```
