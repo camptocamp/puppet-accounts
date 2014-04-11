@@ -383,4 +383,89 @@ describe 'accounts' do
     it { should contain_user('foo') }
   end
 
+  context 'when complex scenario' do
+    let(:params) do
+      {
+        :public_keys => {
+          'foo' => {
+            'type'   => 'ssh-rsa',
+            'key'    => 'FOO-S-RSA-PUBLIC-KEY',
+          },
+          'bar' => {
+            'ensure' => 'absent', # We want to remove the public key but not the user
+            'type'   => 'ssh-rsa',
+            'key'    => 'BAR-S-RSA-PUBLIC-KEY',
+          },
+          'qux' => {
+            'type'   => 'ssh-rsa',
+            'key'    => 'QUX-S-RSA-PUBLIC-KEY',
+          },
+          'quux' => {
+            'type'   => 'ssh-rsa',
+            'key'    => 'QUUX-S-RSA-PUBLIC-KEY',
+          },
+          'corge' => { # is just a public key, without user associated
+            'type'   => 'ssh-rsa',
+            'key'    => 'CORGE-S-RSA-PUBLIC-KEY',
+          },
+        },
+        :users       => {
+          'foo' => {
+            'comment' => 'Foo User',
+            'uid'     => 1000,
+          },
+          'bar' => {
+            'comment' => 'Bar User',
+            'uid'     => 1001,
+          },
+          'baz' => {
+            'comment' => 'Baz User',
+            'uid'     => 1002,
+          },
+          'qux' => {
+            'comment' => 'Qux User',
+            'uid'     => 1003,
+          },
+          'quux' => {
+            'ensure'  => 'absent', # Do we want to remove its public key also ?
+            'comment' => 'Quux User',
+            'uid'     => 1004,
+          }
+        },
+        :accounts    => {
+          'foo' => { # An account with multiple public keys
+            'authorized_keys' => [ 'bar', 'qux', 'quux', 'corge', ],
+          },
+          'bar' => { # An account with a single public key
+          },
+	  'baz' => { # An account without public key
+          },
+          'qux' => { # A removed account
+            'ensure' => 'absent',
+          },
+        },
+      }
+    end
+
+    it { should compile.with_all_deps }
+
+    it { should have_group_resource_count(0) }
+
+    it { should have_ssh_authorized_key_resource_count(8) }
+    it { should contain_ssh_authorized_key('foo-on-foo').with({ :ensure => nil }) }
+    it { should contain_ssh_authorized_key('bar-on-foo').with({ :ensure => :absent }) }
+    it { should contain_ssh_authorized_key('qux-on-foo').with({ :ensure => nil }) }
+    it { should contain_ssh_authorized_key('quux-on-foo').with({ :ensure => nil }) }
+    it { should contain_ssh_authorized_key('corge-on-foo').with({ :ensure => nil }) }
+    it { should contain_ssh_authorized_key('bar-on-bar').with({ :ensure => :absent }) }
+    it { should contain_ssh_authorized_key('bar-on-baz').with({ :ensure => :absent }) }
+    it { should contain_ssh_authorized_key('bar-on-qux').with({ :ensure => :absent }) }
+
+    it { should have_user_resource_count(5) }
+    it { should contain_user('foo').with({ :ensure => nil }) }
+    it { should contain_user('bar').with({ :ensure => nil }) }
+    it { should contain_user('baz').with({ :ensure => nil }) }
+    it { should contain_user('qux').with({ :ensure => :absent }) }
+  end
+
 end
