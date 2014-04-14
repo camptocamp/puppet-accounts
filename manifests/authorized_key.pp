@@ -1,6 +1,8 @@
 define accounts::authorized_key(
   $public_key = regsubst($name, '^(\S+)-on-\S+$', '\1'),
   $user       = regsubst($name, '^\S+-on-(\S+)$', '\1'),
+  $options    = undef,
+  $target     = undef,
 ) {
   validate_hash($::accounts::public_keys)
 
@@ -12,9 +14,11 @@ define accounts::authorized_key(
   } else {
     if $::accounts::public_keys[$public_key] != undef and !( $public_key in absents($::accounts::public_keys)) {
       ssh_authorized_key { "${public_key}-on-${user}":
-        user   => $user,
-        type   => $::accounts::public_keys[$public_key]['type'],
-        key    => $::accounts::public_keys[$public_key]['key'],
+        key     => $::accounts::public_keys[$public_key]['key'],
+        options => $options,
+        target  => $target,
+        type    => $::accounts::public_keys[$public_key]['type'],
+        user    => $user,
       }
     }
   }

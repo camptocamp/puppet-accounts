@@ -21,12 +21,22 @@ define accounts::account(
     }
 
     if $ensure != absent {
-      $_authorized_keys = suffix(
-        unique( delete_undef_values( flatten( [$authorized_keys, $name] ) ) ),
-        "-on-${name}"
-      )
-      accounts::authorized_key { $_authorized_keys:
-        user   => $name,
+      if is_string($authorized_keys) or is_array($authorized_keys) {
+        $_authorized_keys = suffix(
+          unique( delete_undef_values( flatten( [$authorized_keys, $name] ) ) ),
+          "-on-${name}"
+        )
+        accounts::authorized_key { $_authorized_keys:
+          user   => $name,
+        }
+      } elsif is_hash($authorized_keys) {
+        $tmp_hash = merge({"${name}" => {},}, $authorized_keys)
+        $_authorized_keys = hash(
+          zip(suffix(keys($tmp_hash), "-on-${name}"), values($tmp_hash))
+        )
+        create_resources(accounts::authorized_key, $_authorized_keys)
+      } else {
+        fail 'authorized_keys must be a String, an Array or a Hash'
       }
     }
 

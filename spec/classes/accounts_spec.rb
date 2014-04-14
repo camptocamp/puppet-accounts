@@ -236,7 +236,46 @@ describe 'accounts' do
     it { should contain_user('foo') }
   end
 
-  context 'when adding an account with multiple public_keys' do
+  context 'when authorized_keys is a string' do
+    let(:params) do
+      {
+        :public_keys => {
+          'foo' => {
+            'type'   => 'ssh-rsa',
+            'key'    => 'FOO-S-RSA-PUBLIC-KEY',
+          },
+          'bar' => {
+            'type'   => 'ssh-rsa',
+            'key'    => 'BAR-S-RSA-PUBLIC-KEY',
+          },
+        },
+        :users       => {
+          'foo' => {
+            'comment' => 'Foo User',
+            'uid'     => 1000,
+          },
+        },
+        :accounts    => {
+          'foo' => {
+            'authorized_keys' => 'bar',
+	  },
+        },
+      }
+    end
+
+    it { should compile.with_all_deps }
+
+    it { should have_group_resource_count(0) }
+
+    it { should have_ssh_authorized_key_resource_count(2) }
+    it { should contain_ssh_authorized_key('foo-on-foo').with({ :user => 'foo' }) }
+    it { should contain_ssh_authorized_key('bar-on-foo').with({ :user => 'foo' }) }
+
+    it { should have_user_resource_count(1) }
+    it { should contain_user('foo') }
+  end
+
+  context 'when authorized_keys is an array' do
     let(:params) do
       {
         :public_keys => {
@@ -270,6 +309,52 @@ describe 'accounts' do
     it { should have_ssh_authorized_key_resource_count(2) }
     it { should contain_ssh_authorized_key('foo-on-foo').with({ :user => 'foo' }) }
     it { should contain_ssh_authorized_key('bar-on-foo').with({ :user => 'foo' }) }
+
+    it { should have_user_resource_count(1) }
+    it { should contain_user('foo') }
+  end
+
+  context 'when authorized_keys is a hash' do
+    let(:params) do
+      {
+        :public_keys => {
+          'foo' => {
+            'type'   => 'ssh-rsa',
+            'key'    => 'FOO-S-RSA-PUBLIC-KEY',
+          },
+          'bar' => {
+            'type'   => 'ssh-rsa',
+            'key'    => 'BAR-S-RSA-PUBLIC-KEY',
+          },
+        },
+        :users       => {
+          'foo' => {
+            'comment' => 'Foo User',
+            'uid'     => 1000,
+          },
+        },
+        :accounts    => {
+          'foo' => {
+            'authorized_keys' => {
+              'bar' => {
+                'options' => ['no-pty', 'no-port-forwarding', 'no-X11-forwarding'],
+              },
+            },
+	  },
+        },
+      }
+    end
+
+    it { should compile.with_all_deps }
+
+    it { should have_group_resource_count(0) }
+
+    it { should have_ssh_authorized_key_resource_count(2) }
+    it { should contain_ssh_authorized_key('foo-on-foo').with({ :user => 'foo' }) }
+    it { should contain_ssh_authorized_key('bar-on-foo').with({
+      :user    => 'foo',
+      :options => ['no-pty', 'no-port-forwarding', 'no-X11-forwarding'],
+    }) }
 
     it { should have_user_resource_count(1) }
     it { should contain_user('foo') }

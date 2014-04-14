@@ -115,6 +115,8 @@ accounts::accounts:
     groups:
       - quux
     authorized_keys:
-      - quux
-      - foo
+      quux: {}
+      foo:
+        options: ['no-pty', 'no-port-forwarding', 'no-X11-forwarding']
+        target: /etc/sshd/authorized_keys/foo
 ```
