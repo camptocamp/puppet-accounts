@@ -9,7 +9,11 @@ define accounts::authorized_key(
   if $public_key =~ /^@(\S+)$/ {
     ensure_resource(
       accounts::authorized_key,
-      suffix($::accounts::usergroups[$1], "-on-${user}")
+      suffix($::accounts::usergroups[$1], "-on-${user}"),
+      {
+        options => $options,
+        target  => $target,
+      }
     )
   } else {
     if $::accounts::public_keys[$public_key] != undef and !( $public_key in absents($::accounts::public_keys)) {

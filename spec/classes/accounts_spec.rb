@@ -550,7 +550,11 @@ describe 'accounts' do
             'authorized_keys' => [ '@foo', ],
           },
           'corge' => {
-            'authorized_keys' => [ '@bar', ],
+            'authorized_keys' => {
+              '@bar' => {
+                'options' => ['no-pty', 'no-port-forwarding', 'no-X11-forwarding'],
+              }
+            },
           },
         },
       }
@@ -562,9 +566,15 @@ describe 'accounts' do
 
     it { should have_ssh_authorized_key_resource_count(4) }
     it { should contain_ssh_authorized_key('foo-on-quux').with({ :ensure => nil }) }
-    it { should contain_ssh_authorized_key('bar-on-corge').with({ :ensure => nil }) }
+    it { should contain_ssh_authorized_key('bar-on-corge').with({
+      :ensure  => nil,
+      :options => ['no-pty', 'no-port-forwarding', 'no-X11-forwarding'],
+    }) }
     it { should contain_ssh_authorized_key('baz-on-quux').with({ :ensure => nil }) }
-    it { should contain_ssh_authorized_key('qux-on-corge').with({ :ensure => nil }) }
+    it { should contain_ssh_authorized_key('qux-on-corge').with({
+      :ensure  => nil,
+      :options => ['no-pty', 'no-port-forwarding', 'no-X11-forwarding'],
+    }) }
 
     it { should have_user_resource_count(2) }
     it { should contain_user('quux').with({ :ensure => nil, }) }
