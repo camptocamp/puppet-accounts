@@ -8,24 +8,24 @@ Usage
 
 ```puppet
 class { 'accounts':
-  groups      => hiera_hash('accounts::groups'),
-  public_keys => hiera_hash('accounts::public_keys'),
-  users       => hiera_hash('accounts::users'),
-  usergroups  => hiera_hash('accounts::usergroups'),
-  accounts    => hiera_hash('accounts::accounts'),
+  groups     => hiera_hash('accounts::groups', {}),
+  ssh_keys   => hiera_hash('accounts::ssh_keys', {}),
+  users      => hiera_hash('accounts::users', {}),
+  usergroups => hiera_hash('accounts::usergroups', {}),
+  accounts   => hiera_hash('accounts::accounts', {}),
 }
 ```
 
 ### common.yaml
 ```
 ---
-accounts::public_keys:
+accounts::ssh_keys:
   foo:
     type: ssh-rsa
-    key: FOO-S-RSA-PUBLIC-KEY
+    public: FOO-S-RSA-PUBLIC-KEY
   bar:
     type: ssh-rsa
-    key: BAR-S-RSA-PUBLIC-KEY
+    public: BAR-S-RSA-PUBLIC-KEY
 
 accounts::users:
   foo:
@@ -79,10 +79,11 @@ accounts::groups:
   bar:
     system: true
 
-accounts::public_keys:
+accounts::ssh_keys:
   baz:
     type: ssh-rsa
-    key: BAZ-S-RSA-PUBLIC-KEY
+    private: BAZ-S-PRIVATE-KEY
+    public: BAZ-S-RSA-PUBLIC-KEY
 
 accounts::users:
   baz:
@@ -100,10 +101,10 @@ accounts::accounts:
 ### bar.example.com.yaml
 ```
 ---
-accounts::public_keys:
+accounts::ssh_keys:
   quux:
     type: ssh-rsa
-    key: QUUX-S-RSA-PUBLIC-KEY
+    public: QUUX-S-RSA-PUBLIC-KEY
 
 accounts::users:
   quux:

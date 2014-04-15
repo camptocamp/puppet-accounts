@@ -4,7 +4,7 @@ define accounts::authorized_key(
   $options    = undef,
   $target     = undef,
 ) {
-  validate_hash($::accounts::public_keys)
+  validate_hash($::accounts::ssh_keys)
 
   if $public_key =~ /^@(\S+)$/ {
     ensure_resource(
@@ -16,12 +16,12 @@ define accounts::authorized_key(
       }
     )
   } else {
-    if $::accounts::public_keys[$public_key] != undef and !( $public_key in absents($::accounts::public_keys)) {
+    if $::accounts::ssh_keys[$public_key] != undef and !( $public_key in absents($::accounts::ssh_keys)) {
       ssh_authorized_key { "${public_key}-on-${user}":
-        key     => $::accounts::public_keys[$public_key]['key'],
+        key     => $::accounts::ssh_keys[$public_key]['public'],
         options => $options,
         target  => $target,
-        type    => $::accounts::public_keys[$public_key]['type'],
+        type    => $::accounts::ssh_keys[$public_key]['type'],
         user    => $user,
       }
     }

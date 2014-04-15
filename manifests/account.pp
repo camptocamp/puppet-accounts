@@ -15,10 +15,17 @@ define accounts::account(
       }
     )
   } else {
-    user { $name:
-      ensure => $ensure,
-      groups => $groups,
-    }
+    ensure_resource(
+      user,
+      $name,
+      merge(
+        $::accounts::users[$name],
+        {
+          ensure => $ensure,
+          groups => $groups,
+        }
+      )
+    )
 
     if $ensure != absent {
       if is_string($authorized_keys) or is_array($authorized_keys) {
@@ -38,9 +45,14 @@ define accounts::account(
       } else {
         fail 'authorized_keys must be a String, an Array or a Hash'
       }
+      if $::accounts::ssh_keys[$name] != undef and $::accounts::ssh_keys[$name]['private'] != undef {
+        file { "/home/${user}/.ssh/id_rsa":
+          content => $::accounts::ssh_keys[$name]['private'],
+        }
+      }
     }
 
-    $keys_to_remove = suffix(keys(absents($::accounts::public_keys)), "-on-${name}")
+    $keys_to_remove = suffix(keys(absents($::accounts::ssh_keys)), "-on-${name}")
     ssh_authorized_key { $keys_to_remove:
       ensure => absent,
       user   => $name,

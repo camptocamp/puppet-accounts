@@ -29,22 +29,23 @@ describe 'accounts' do
     it { should have_user_resource_count(0) }
   end
 
-  context 'with public_keys only' do
+  context 'with ssh_keys only' do
     let(:params) do
       {
-        :public_keys => {
+        :ssh_keys => {
           'foo' => {
-            'type' => 'ssh-rsa',
-            'key'  => 'FOO-S-RSA-PUBLIC-KEY',
+            'type'   => 'ssh-rsa',
+            'public' => 'FOO-S-RSA-PUBLIC-KEY',
           },
           'bar' => {
             'type'   => 'ssh-rsa',
-            'key'    => 'BAR-S-RSA-PUBLIC-KEY',
+            'public' => 'BAR-S-RSA-PUBLIC-KEY',
           },
           'baz' => {
-            'ensure' => 'absent',
-            'type'   => 'ssh-rsa',
-            'key'    => 'BAR-S-RSA-PUBLIC-KEY',
+            'ensure'  => 'absent',
+            'type'    => 'ssh-rsa',
+	    'private' => 'BAR-S-RSA-PRIVATE-KEY',
+            'public'  => 'BAR-S-RSA-PUBLIC-KEY',
           },
         },
       }
@@ -113,6 +114,46 @@ describe 'accounts' do
 
     it { should have_user_resource_count(1) }
     it { should contain_user('foo') }
+  end
+
+  context 'when adding an account with a private key' do
+    let(:params) do
+      {
+        :ssh_keys => {
+          'foo' => {
+            'type'    => 'ssh-rsa',
+	    'private' => 'FOO-S-RSA-PRIVATE-KEY',
+            'public'  => 'FOO-S-RSA-PUBLIC-KEY',
+          },
+        },
+        :users       => {
+          'foo' => {
+            'comment' => 'Foo User',
+            'uid'     => 1000,
+          },
+        },
+        :accounts    => {
+          'foo' => { },
+        },
+      }
+    end
+
+    it { should compile.with_all_deps }
+
+    it { should have_group_resource_count(0) }
+
+    it { should have_ssh_authorized_key_resource_count(1) }
+    it { should contain_ssh_authorized_key('foo-on-foo').with({
+      :key  => 'FOO-S-RSA-PUBLIC-KEY',
+      :type => 'ssh-rsa',
+    }) }
+
+    it { should have_user_resource_count(1) }
+    it { should contain_user('foo') }
+
+    it { should contain_file('/home/foo/.ssh/id_rsa').with({
+      :content => 'FOO-S-RSA-PRIVATE-KEY',
+    })}
   end
 
   context 'when adding an account in a group not declared' do
@@ -207,10 +248,10 @@ describe 'accounts' do
   context 'when adding an account with only its public_key' do
     let(:params) do
       {
-        :public_keys => {
+        :ssh_keys => {
           'foo' => {
             'type'   => 'ssh-rsa',
-            'key'    => 'FOO-S-RSA-PUBLIC-KEY',
+            'public'    => 'FOO-S-RSA-PUBLIC-KEY',
           },
         },
         :users       => {
@@ -239,14 +280,14 @@ describe 'accounts' do
   context 'when authorized_keys is a string' do
     let(:params) do
       {
-        :public_keys => {
+        :ssh_keys => {
           'foo' => {
             'type'   => 'ssh-rsa',
-            'key'    => 'FOO-S-RSA-PUBLIC-KEY',
+            'public'    => 'FOO-S-RSA-PUBLIC-KEY',
           },
           'bar' => {
             'type'   => 'ssh-rsa',
-            'key'    => 'BAR-S-RSA-PUBLIC-KEY',
+            'public'    => 'BAR-S-RSA-PUBLIC-KEY',
           },
         },
         :users       => {
@@ -278,14 +319,14 @@ describe 'accounts' do
   context 'when authorized_keys is an array' do
     let(:params) do
       {
-        :public_keys => {
+        :ssh_keys => {
           'foo' => {
             'type'   => 'ssh-rsa',
-            'key'    => 'FOO-S-RSA-PUBLIC-KEY',
+            'public'    => 'FOO-S-RSA-PUBLIC-KEY',
           },
           'bar' => {
             'type'   => 'ssh-rsa',
-            'key'    => 'BAR-S-RSA-PUBLIC-KEY',
+            'public'    => 'BAR-S-RSA-PUBLIC-KEY',
           },
         },
         :users       => {
@@ -317,14 +358,14 @@ describe 'accounts' do
   context 'when authorized_keys is a hash' do
     let(:params) do
       {
-        :public_keys => {
+        :ssh_keys => {
           'foo' => {
             'type'   => 'ssh-rsa',
-            'key'    => 'FOO-S-RSA-PUBLIC-KEY',
+            'public'    => 'FOO-S-RSA-PUBLIC-KEY',
           },
           'bar' => {
             'type'   => 'ssh-rsa',
-            'key'    => 'BAR-S-RSA-PUBLIC-KEY',
+            'public'    => 'BAR-S-RSA-PUBLIC-KEY',
           },
         },
         :users       => {
@@ -363,22 +404,22 @@ describe 'accounts' do
   context 'when adding a user group' do
     let(:params) do
       {
-        :public_keys => {
+        :ssh_keys => {
           'foo' => {
             'type'   => 'ssh-rsa',
-            'key'    => 'FOO-S-RSA-PUBLIC-KEY',
+            'public'    => 'FOO-S-RSA-PUBLIC-KEY',
           },
           'bar' => {
             'type'   => 'ssh-rsa',
-            'key'    => 'BAR-S-RSA-PUBLIC-KEY',
+            'public'    => 'BAR-S-RSA-PUBLIC-KEY',
           },
           'baz' => {
             'type'   => 'ssh-rsa',
-            'key'    => 'BAZ-S-RSA-PUBLIC-KEY',
+            'public'    => 'BAZ-S-RSA-PUBLIC-KEY',
           },
           'qux' => {
             'type'   => 'ssh-rsa',
-            'key'    => 'QUX-S-RSA-PUBLIC-KEY',
+            'public'    => 'QUX-S-RSA-PUBLIC-KEY',
           },
         },
         :users       => {
@@ -434,22 +475,22 @@ describe 'accounts' do
   context 'when adding a user group with ambiguous groups' do
     let(:params) do
       {
-        :public_keys => {
+        :ssh_keys => {
           'foo' => {
             'type'   => 'ssh-rsa',
-            'key'    => 'FOO-S-RSA-PUBLIC-KEY',
+            'public'    => 'FOO-S-RSA-PUBLIC-KEY',
           },
           'bar' => {
             'type'   => 'ssh-rsa',
-            'key'    => 'BAR-S-RSA-PUBLIC-KEY',
+            'public'    => 'BAR-S-RSA-PUBLIC-KEY',
           },
           'baz' => {
             'type'   => 'ssh-rsa',
-            'key'    => 'BAZ-S-RSA-PUBLIC-KEY',
+            'public'    => 'BAZ-S-RSA-PUBLIC-KEY',
           },
           'qux' => {
             'type'   => 'ssh-rsa',
-            'key'    => 'QUX-S-RSA-PUBLIC-KEY',
+            'public'    => 'QUX-S-RSA-PUBLIC-KEY',
           },
         },
         :users       => {
@@ -505,22 +546,22 @@ describe 'accounts' do
   context 'when adding a public keys of a user group' do
     let(:params) do
       {
-        :public_keys => {
+        :ssh_keys => {
           'foo' => {
             'type'   => 'ssh-rsa',
-            'key'    => 'FOO-S-RSA-PUBLIC-KEY',
+            'public'    => 'FOO-S-RSA-PUBLIC-KEY',
           },
           'bar' => {
             'type'   => 'ssh-rsa',
-            'key'    => 'BAR-S-RSA-PUBLIC-KEY',
+            'public'    => 'BAR-S-RSA-PUBLIC-KEY',
           },
           'baz' => {
             'type'   => 'ssh-rsa',
-            'key'    => 'BAZ-S-RSA-PUBLIC-KEY',
+            'public'    => 'BAZ-S-RSA-PUBLIC-KEY',
           },
           'qux' => {
             'type'   => 'ssh-rsa',
-            'key'    => 'QUX-S-RSA-PUBLIC-KEY',
+            'public'    => 'QUX-S-RSA-PUBLIC-KEY',
           },
         },
         :users       => {
@@ -584,14 +625,14 @@ describe 'accounts' do
   context 'when removing an account' do
     let(:params) do
       {
-        :public_keys => {
+        :ssh_keys => {
           'foo' => {
             'type'   => 'ssh-rsa',
-            'key'    => 'FOO-S-RSA-PUBLIC-KEY',
+            'public'    => 'FOO-S-RSA-PUBLIC-KEY',
           },
           'bar' => {
             'type'   => 'ssh-rsa',
-            'key'    => 'BAR-S-RSA-PUBLIC-KEY',
+            'public'    => 'BAR-S-RSA-PUBLIC-KEY',
           },
         },
         :users       => {
@@ -621,14 +662,14 @@ describe 'accounts' do
   context 'when removing an user' do
     let(:params) do
       {
-        :public_keys => {
+        :ssh_keys => {
           'foo' => {
             'type'   => 'ssh-rsa',
-            'key'    => 'FOO-S-RSA-PUBLIC-KEY',
+            'public'    => 'FOO-S-RSA-PUBLIC-KEY',
           },
           'bar' => {
             'type'   => 'ssh-rsa',
-            'key'    => 'BAR-S-RSA-PUBLIC-KEY',
+            'public'    => 'BAR-S-RSA-PUBLIC-KEY',
           },
         },
         :users       => {
@@ -654,15 +695,15 @@ describe 'accounts' do
   context 'when removing a public key' do
     let(:params) do
       {
-        :public_keys => {
+        :ssh_keys => {
           'foo' => {
             'type'   => 'ssh-rsa',
-            'key'    => 'FOO-S-RSA-PUBLIC-KEY',
+            'public'    => 'FOO-S-RSA-PUBLIC-KEY',
           },
           'bar' => {
             'ensure' => 'absent',
             'type'   => 'ssh-rsa',
-            'key'    => 'BAR-S-RSA-PUBLIC-KEY',
+            'public'    => 'BAR-S-RSA-PUBLIC-KEY',
           },
         },
         :users       => {
@@ -692,27 +733,27 @@ describe 'accounts' do
   context 'when complex scenario' do
     let(:params) do
       {
-        :public_keys => {
+        :ssh_keys => {
           'foo' => {
             'type'   => 'ssh-rsa',
-            'key'    => 'FOO-S-RSA-PUBLIC-KEY',
+            'public'    => 'FOO-S-RSA-PUBLIC-KEY',
           },
           'bar' => {
             'ensure' => 'absent', # We want to remove the public key but not the user
             'type'   => 'ssh-rsa',
-            'key'    => 'BAR-S-RSA-PUBLIC-KEY',
+            'public'    => 'BAR-S-RSA-PUBLIC-KEY',
           },
           'qux' => {
             'type'   => 'ssh-rsa',
-            'key'    => 'QUX-S-RSA-PUBLIC-KEY',
+            'public'    => 'QUX-S-RSA-PUBLIC-KEY',
           },
           'quux' => {
             'type'   => 'ssh-rsa',
-            'key'    => 'QUUX-S-RSA-PUBLIC-KEY',
+            'public'    => 'QUUX-S-RSA-PUBLIC-KEY',
           },
           'corge' => { # is just a public key, without user associated
             'type'   => 'ssh-rsa',
-            'key'    => 'CORGE-S-RSA-PUBLIC-KEY',
+            'public'    => 'CORGE-S-RSA-PUBLIC-KEY',
           },
         },
         :users       => {
