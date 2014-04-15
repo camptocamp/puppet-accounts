@@ -15,17 +15,19 @@ define accounts::account(
       }
     )
   } else {
-    ensure_resource(
-      user,
-      $name,
-      merge(
-        $::accounts::users[$name],
-        {
-          ensure => $ensure,
-          groups => $groups,
-        }
+    if $::accounts::users[$user] != undef {
+      ensure_resource(
+        user,
+        $name,
+        merge(
+          $::accounts::users[$name],
+          {
+            ensure => $ensure,
+            groups => $groups,
+          }
+        )
       )
-    )
+    }
 
     if $ensure != absent {
       if is_string($authorized_keys) or is_array($authorized_keys) {

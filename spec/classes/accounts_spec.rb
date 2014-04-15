@@ -116,6 +116,34 @@ describe 'accounts' do
     it { should contain_user('foo') }
   end
 
+  context 'when adding an account with no user' do
+    let(:params) do
+      {
+        :ssh_keys => {
+          'foo' => {
+            'type'   => 'ssh-rsa',
+            'public' => 'FOO-S-RSA-PUBLIC-KEY',
+          },
+	},
+        :accounts    => {
+          'foo' => { },
+        },
+      }
+    end
+
+    it { should compile.with_all_deps }
+
+    it { should have_group_resource_count(0) }
+
+    it { should have_ssh_authorized_key_resource_count(1) }
+    it { should contain_ssh_authorized_key('foo-on-foo').with({
+      :type => 'ssh-rsa',
+      :key  => 'FOO-S-RSA-PUBLIC-KEY',
+    })}
+
+    it { should have_user_resource_count(0) }
+  end
+
   context 'when adding an account with a private key' do
     let(:params) do
       {
@@ -617,9 +645,7 @@ describe 'accounts' do
       :options => ['no-pty', 'no-port-forwarding', 'no-X11-forwarding'],
     }) }
 
-    it { should have_user_resource_count(2) }
-    it { should contain_user('quux').with({ :ensure => nil, }) }
-    it { should contain_user('corge').with({ :ensure => nil, }) }
+    it { should have_user_resource_count(0) }
   end
 
   context 'when removing an account' do
