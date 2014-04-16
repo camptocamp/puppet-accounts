@@ -2,6 +2,10 @@ require 'spec_helper'
 
 describe 'accounts' do
 
+  let(:facts) { {
+    :osfamily => 'Debian',
+  } }
+
   context 'with no parameters' do
     it { should compile.with_all_deps }
   end
