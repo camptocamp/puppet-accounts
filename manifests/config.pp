@@ -1,3 +1,4 @@
+# see README for doc
 class accounts::config {
 
   case $::osfamily {
@@ -31,7 +32,7 @@ class accounts::config {
         }
       }
       if $::accounts::start_gid != undef {
-        augeas {'Set first and last uids':
+        augeas {'Set first and last gids':
           incl    => '/etc/login.defs',
           lens    => 'Login_Defs.lns',
           changes => [
@@ -41,6 +42,11 @@ class accounts::config {
       }
     }
 
+    default: {
+      if $::accounts::start_uid != undef or $::accounts::start_gid != undef {
+        fail ("Don't know how to handle accounts min/max uid/gid on osfamily '${::osfamily}'")
+      }
+    }
   }
 
 }
