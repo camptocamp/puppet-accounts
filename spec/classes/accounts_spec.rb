@@ -558,21 +558,54 @@ describe 'accounts' do
       }
     end
 
-    it { pending { should compile.with_all_deps } }
-
-    it { pending { should have_group_resource_count(0) } }
-
-    it { pending { should have_ssh_authorized_key_resource_count(4) } }
-    it { pending { should contain_ssh_authorized_key('foo-on-foo').with({ :ensure => nil }) } }
-    it { pending { should contain_ssh_authorized_key('bar-on-bar').with({ :ensure => nil }) } }
-    it { pending { should contain_ssh_authorized_key('baz-on-baz').with({ :ensure => nil }) } }
-    it { pending { should contain_ssh_authorized_key('qux-on-qux').with({ :ensure => nil }) } }
-
-    it { pending { should have_user_resource_count(4) } }
-    it { pending { should contain_user('foo').with({ :ensure => nil, :groups => 'foo', }) } }
-    it { pending { should contain_user('bar').with({ :ensure => nil, :groups => 'bar', }) } }
-    it { pending { should contain_user('baz').with({ :ensure => nil, :groups => 'foo', }) } }
-    it { pending { should contain_user('qux').with({ :ensure => nil, :groups => 'bar', }) } }
+    it {
+      pending
+      should compile.with_all_deps
+    }
+    it {
+      pending
+      should have_group_resource_count(0)
+    }
+    it {
+      pending
+      should have_ssh_authorized_key_resource_count(4)
+    }
+    it {
+      pending
+      should contain_ssh_authorized_key('foo-on-foo').with({ :ensure => nil })
+    }
+    it {
+      pending
+      should contain_ssh_authorized_key('bar-on-bar').with({ :ensure => nil })
+    }
+    it {
+      pending
+      should contain_ssh_authorized_key('baz-on-baz').with({ :ensure => nil })
+    }
+    it {
+      pending
+      should contain_ssh_authorized_key('qux-on-qux').with({ :ensure => nil })
+    }
+    it {
+      pending
+      should have_user_resource_count(4)
+    }
+    it {
+      pending
+      should contain_user('foo').with({ :ensure => nil, :groups => 'foo', })
+    }
+    it {
+      pending
+      should contain_user('bar').with({ :ensure => nil, :groups => 'bar', })
+    }
+    it {
+      pending
+      should contain_user('baz').with({ :ensure => nil, :groups => 'foo', })
+    }
+    it {
+      pending
+      should contain_user('qux').with({ :ensure => nil, :groups => 'bar', })
+    }
   end
 
   context 'when adding a public keys of a user group' do
