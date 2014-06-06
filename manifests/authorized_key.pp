@@ -1,3 +1,4 @@
+# See README.md for details.
 define accounts::authorized_key(
   $public_key = regsubst($name, '^(\S+)-on-\S+$', '\1'),
   $user       = regsubst($name, '^\S+-on-(\S+)$', '\1'),

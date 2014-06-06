@@ -17,6 +17,6 @@ task :validate do
   end
 end
 
-#PuppetLint.configuration.send('disable_class_parameter_defaults')
+PuppetLint.configuration.send('disable_only_variable_string')
 PuppetLint.configuration.fail_on_warnings = true
 task :default => [:spec, :lint, :validate]

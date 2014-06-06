@@ -1,3 +1,4 @@
+# See README.md for details.
 define accounts::account(
   $ensure          = undef,
   $user            = $name,
