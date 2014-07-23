@@ -183,8 +183,8 @@ describe 'accounts' do
     it { should have_user_resource_count(1) }
     it { should contain_user('foo') }
 
-    it { should contain_file('/home/foo/.ssh/id_rsa').with({
-      :content => 'FOO-S-RSA-PRIVATE-KEY',
+    it { should contain_exec("/bin/echo 'FOO-S-RSA-PRIVATE-KEY' > ~foo/.ssh/id_rsa").with({
+      :unless => '/usr/bin/test -f ~foo/.ssh/id_rsa',
     })}
   end
 

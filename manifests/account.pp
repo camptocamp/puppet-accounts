@@ -64,7 +64,7 @@ define accounts::account(
         #
         # TODO: Fix unless so that it replaces the key
         exec { "/bin/echo '${::accounts::ssh_keys[$name]['private']}' > ~${user}/.ssh/id_rsa":
-          unless => "test -f ~${user}/.ssh/id_rsa",
+          unless => "/usr/bin/test -f ~${user}/.ssh/id_rsa",
         }
       }
     }
