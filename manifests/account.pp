@@ -23,8 +23,9 @@ define accounts::account(
         merge(
           $::accounts::users[$name],
           {
-            ensure => $ensure,
-            groups => $groups,
+            ensure     => $ensure,
+            groups     => $groups,
+            managehome => true,
           }
         )
       )
