@@ -1,9 +1,10 @@
 # See README.md for details.
 define accounts::account(
-  $ensure          = undef,
-  $user            = $name,
-  $groups          = [],
-  $authorized_keys = [],
+  $ensure                 = undef,
+  $user                   = $name,
+  $groups                 = [],
+  $authorized_keys        = [],
+  $authorized_keys_target = undef,
 ) {
   if $user =~ /^@(\S+)$/ {
     ensure_resource(
@@ -39,13 +40,15 @@ define accounts::account(
         )
         accounts::authorized_key { $_authorized_keys:
           user   => $name,
+          target => $authorized_keys_target,
         }
       } elsif is_hash($authorized_keys) {
         $tmp_hash = merge({"${name}" => {},}, $authorized_keys)
         $_authorized_keys = hash(
           zip(suffix(keys($tmp_hash), "-on-${name}"), values($tmp_hash))
         )
-        create_resources(accounts::authorized_key, $_authorized_keys)
+        create_resources(accounts::authorized_key, $_authorized_keys,
+                         { target => $authorized_keys_target, })
       } else {
         fail 'authorized_keys must be a String, an Array or a Hash'
       }
@@ -74,6 +77,7 @@ define accounts::account(
     ssh_authorized_key { $keys_to_remove:
       ensure => absent,
       user   => $name,
+      target => $authorized_keys_target,
     }
   }
 }
