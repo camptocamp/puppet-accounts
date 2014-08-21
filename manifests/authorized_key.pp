@@ -8,6 +8,9 @@ define accounts::authorized_key(
   validate_hash($::accounts::ssh_keys)
 
   if $public_key =~ /^@(\S+)$/ {
+    if ! has_key($::accounts::usergroups, $1) {
+      fail "Can't find usergroup : ${1}"
+    }
     ensure_resource(
       accounts::authorized_key,
       suffix($::accounts::usergroups[$1], "-on-${user}"),

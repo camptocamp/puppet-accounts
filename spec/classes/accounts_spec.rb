@@ -433,6 +433,19 @@ describe 'accounts' do
     it { should contain_user('foo') }
   end
 
+  context 'when using an undefined user group' do
+    let(:params) do
+      {
+        :accounts => {
+          '@foo' => { },
+	},
+      }
+    end
+
+    it { expect { should compile.with_all_deps}.to raise_error(Puppet::Error, /Can't find usergroup : foo/) }
+
+  end
+
   context 'when adding a user group' do
     let(:params) do
       {

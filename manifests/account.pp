@@ -7,6 +7,9 @@ define accounts::account(
   $authorized_keys_target = undef,
 ) {
   if $user =~ /^@(\S+)$/ {
+    if ! has_key($::accounts::usergroups, $1) {
+      fail "Can't find usergroup : ${1}"
+    }
     ensure_resource(
       accounts::account,
       $::accounts::usergroups[$1],
