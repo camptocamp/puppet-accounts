@@ -47,8 +47,11 @@ define accounts::account(
         $_authorized_keys = hash(
           zip(suffix(keys($tmp_hash), "-on-${name}"), values($tmp_hash))
         )
-        create_resources(accounts::authorized_key, $_authorized_keys,
-                         { target => $authorized_keys_target, })
+        create_resources(
+          accounts::authorized_key,
+          $_authorized_keys,
+          { target => $authorized_keys_target, }
+        )
       } else {
         fail 'authorized_keys must be a String, an Array or a Hash'
       }
