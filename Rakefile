@@ -18,5 +18,6 @@ task :validate do
 end
 
 PuppetLint.configuration.send('disable_only_variable_string')
+PuppetLint.configuration.send('disable_autoloader_layout') # Temporary ignore as I can't figure out how to pass --relative to rake
 PuppetLint.configuration.fail_on_warnings = true
 task :default => [:spec, :lint, :validate]
