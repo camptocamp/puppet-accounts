@@ -16,7 +16,7 @@ describe 'accounts' do
         :groups => {
           'foo' => {},
           'bar' => {},
-	  'baz' => { 'ensure' => 'absent' },
+          'baz' => { 'ensure' => 'absent' },
         },
       }
     end
@@ -319,7 +319,7 @@ describe 'accounts' do
           },
           'bar' => {
             'type'   => 'ssh-rsa',
-            'public'    => 'BAR-S-RSA-PUBLIC-KEY',
+            'public' => 'BAR-S-RSA-PUBLIC-KEY',
           },
         },
         :users       => {
@@ -354,11 +354,11 @@ describe 'accounts' do
         :ssh_keys => {
           'foo' => {
             'type'   => 'ssh-rsa',
-            'public'    => 'FOO-S-RSA-PUBLIC-KEY',
+            'public' => 'FOO-S-RSA-PUBLIC-KEY',
           },
           'bar' => {
             'type'   => 'ssh-rsa',
-            'public'    => 'BAR-S-RSA-PUBLIC-KEY',
+            'public' => 'BAR-S-RSA-PUBLIC-KEY',
           },
         },
         :users       => {
