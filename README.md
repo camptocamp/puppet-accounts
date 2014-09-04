@@ -8,11 +8,12 @@ Usage
 
 ```puppet
 class { 'accounts':
-  groups     => hiera_hash('accounts::groups', {}),
-  ssh_keys   => hiera_hash('accounts::ssh_keys', {}),
-  users      => hiera_hash('accounts::users', {}),
-  usergroups => hiera_hash('accounts::usergroups', {}),
-  accounts   => hiera_hash('accounts::accounts', {}),
+  groups                   => hiera_hash('accounts::groups', {}),
+  ssh_keys                 => hiera_hash('accounts::ssh_keys', {}),
+  users                    => hiera_hash('accounts::users', {}),
+  usergroups               => hiera_hash('accounts::usergroups', {}),
+  accounts                 => hiera_hash('accounts::accounts', {}),
+  ssh_authorized_key_title => '%{ssh_keys[\'%{ssh_key}\'][\'comment\'] on %{user}',
 }
 ```
 

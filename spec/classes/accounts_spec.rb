@@ -148,6 +148,36 @@ describe 'accounts' do
     it { should have_user_resource_count(0) }
   end
 
+  context 'when adding an account with no user and a specific ssh_authorized_key title' do
+    let(:params) do
+      {
+        :ssh_keys => {
+          'foo' => {
+            'type'    => 'ssh-rsa',
+            'comment' => 'Mr. Foo',
+            'public'  => 'FOO-S-RSA-PUBLIC-KEY',
+          },
+	},
+        :accounts    => {
+          'foo' => { },
+        },
+	:ssh_authorized_key_title => '%{ssh_keys[\'%{ssh_key}\'][\'comment\']} on %{user}',
+      }
+    end
+
+    it { should compile.with_all_deps }
+
+    it { should have_group_resource_count(0) }
+
+    it { should have_ssh_authorized_key_resource_count(1) }
+    it { should contain_ssh_authorized_key('Mr. Foo on foo').with({
+      :type => 'ssh-rsa',
+      :key  => 'FOO-S-RSA-PUBLIC-KEY',
+    })}
+
+    it { should have_user_resource_count(0) }
+  end
+
   context 'when adding an account with a private key' do
     let(:params) do
       {
@@ -176,6 +206,47 @@ describe 'accounts' do
 
     it { should have_ssh_authorized_key_resource_count(1) }
     it { should contain_ssh_authorized_key('foo-on-foo').with({
+      :key  => 'FOO-S-RSA-PUBLIC-KEY',
+      :type => 'ssh-rsa',
+    }) }
+
+    it { should have_user_resource_count(1) }
+    it { should contain_user('foo') }
+
+    it { should contain_exec("/bin/echo 'FOO-S-RSA-PRIVATE-KEY' > ~foo/.ssh/id_rsa").with({
+      :unless => '/usr/bin/test -f ~foo/.ssh/id_rsa',
+    })}
+  end
+
+  context 'when adding an account with a private key and a specific ssh_authorized_key title' do
+    let(:params) do
+      {
+        :ssh_keys => {
+          'foo' => {
+            'type'    => 'ssh-rsa',
+	    'private' => 'FOO-S-RSA-PRIVATE-KEY',
+            'public'  => 'FOO-S-RSA-PUBLIC-KEY',
+          },
+        },
+        :users       => {
+          'foo' => {
+            'comment' => 'Foo User',
+            'uid'     => 1000,
+          },
+        },
+        :accounts    => {
+          'foo' => { },
+        },
+	:ssh_authorized_key_title => '%{ssh_key} on %{user}',
+      }
+    end
+
+    it { should compile.with_all_deps }
+
+    it { should have_group_resource_count(0) }
+
+    it { should have_ssh_authorized_key_resource_count(1) }
+    it { should contain_ssh_authorized_key('foo on foo').with({
       :key  => 'FOO-S-RSA-PUBLIC-KEY',
       :type => 'ssh-rsa',
     }) }
@@ -277,7 +348,7 @@ describe 'accounts' do
     it { should contain_user('foo').with({ :groups => [ 'foo', 'bar', ] }) }
   end
 
-  context 'when adding an account with only its public_key' do
+  context 'when adding an account with only its ssh_key' do
     let(:params) do
       {
         :ssh_keys => {
@@ -309,13 +380,46 @@ describe 'accounts' do
     it { should contain_user('foo') }
   end
 
-  context 'when authorized_keys is a string' do
+  context 'when adding an account with only its ssh_key and a specific ssh_authorized_key title' do
     let(:params) do
       {
         :ssh_keys => {
           'foo' => {
             'type'   => 'ssh-rsa',
             'public'    => 'FOO-S-RSA-PUBLIC-KEY',
+          },
+        },
+        :users       => {
+          'foo' => {
+            'comment' => 'Foo User',
+            'uid'     => 1000,
+          },
+        },
+        :accounts    => {
+          'foo' => { },
+        },
+        :ssh_authorized_key_title => '%{ssh_key} on %{user}',
+      }
+    end
+
+    it { should compile.with_all_deps }
+
+    it { should have_group_resource_count(0) }
+
+    it { should have_ssh_authorized_key_resource_count(1) }
+    it { should contain_ssh_authorized_key('foo on foo').with({ :user => 'foo' }) }
+
+    it { should have_user_resource_count(1) }
+    it { should contain_user('foo') }
+  end
+
+  context 'when authorized_keys is a string' do
+    let(:params) do
+      {
+        :ssh_keys => {
+          'foo' => {
+            'type'   => 'ssh-rsa',
+            'public' => 'FOO-S-RSA-PUBLIC-KEY',
           },
           'bar' => {
             'type'   => 'ssh-rsa',
@@ -343,6 +447,46 @@ describe 'accounts' do
     it { should have_ssh_authorized_key_resource_count(2) }
     it { should contain_ssh_authorized_key('foo-on-foo').with({ :user => 'foo' }) }
     it { should contain_ssh_authorized_key('bar-on-foo').with({ :user => 'foo' }) }
+
+    it { should have_user_resource_count(1) }
+    it { should contain_user('foo') }
+  end
+
+  context 'when authorized_keys is a string and a specific ssh_authorized_key title' do
+    let(:params) do
+      {
+        :ssh_keys => {
+          'foo' => {
+            'type'   => 'ssh-rsa',
+            'public' => 'FOO-S-RSA-PUBLIC-KEY',
+          },
+          'bar' => {
+            'type'   => 'ssh-rsa',
+            'public' => 'BAR-S-RSA-PUBLIC-KEY',
+          },
+        },
+        :users       => {
+          'foo' => {
+            'comment' => 'Foo User',
+            'uid'     => 1000,
+          },
+        },
+        :accounts    => {
+          'foo' => {
+            'authorized_keys' => 'bar',
+	  },
+        },
+        :ssh_authorized_key_title => '%{ssh_key} on %{user}',
+      }
+    end
+
+    it { should compile.with_all_deps }
+
+    it { should have_group_resource_count(0) }
+
+    it { should have_ssh_authorized_key_resource_count(2) }
+    it { should contain_ssh_authorized_key('foo on foo').with({ :user => 'foo' }) }
+    it { should contain_ssh_authorized_key('bar on foo').with({ :user => 'foo' }) }
 
     it { should have_user_resource_count(1) }
     it { should contain_user('foo') }
@@ -387,6 +531,46 @@ describe 'accounts' do
     it { should contain_user('foo') }
   end
 
+  context 'when authorized_keys is an array and a specific ssh_authorized_key title' do
+    let(:params) do
+      {
+        :ssh_keys => {
+          'foo' => {
+            'type'   => 'ssh-rsa',
+            'public' => 'FOO-S-RSA-PUBLIC-KEY',
+          },
+          'bar' => {
+            'type'   => 'ssh-rsa',
+            'public' => 'BAR-S-RSA-PUBLIC-KEY',
+          },
+        },
+        :users       => {
+          'foo' => {
+            'comment' => 'Foo User',
+            'uid'     => 1000,
+          },
+        },
+        :accounts    => {
+          'foo' => {
+            'authorized_keys' => [ 'bar' ],
+	  },
+        },
+        :ssh_authorized_key_title => '%{ssh_key} on %{user}',
+      }
+    end
+
+    it { should compile.with_all_deps }
+
+    it { should have_group_resource_count(0) }
+
+    it { should have_ssh_authorized_key_resource_count(2) }
+    it { should contain_ssh_authorized_key('foo on foo').with({ :user => 'foo' }) }
+    it { should contain_ssh_authorized_key('bar on foo').with({ :user => 'foo' }) }
+
+    it { should have_user_resource_count(1) }
+    it { should contain_user('foo') }
+  end
+
   context 'when authorized_keys is a hash' do
     let(:params) do
       {
@@ -425,6 +609,53 @@ describe 'accounts' do
     it { should have_ssh_authorized_key_resource_count(2) }
     it { should contain_ssh_authorized_key('foo-on-foo').with({ :user => 'foo' }) }
     it { should contain_ssh_authorized_key('bar-on-foo').with({
+      :user    => 'foo',
+      :options => ['no-pty', 'no-port-forwarding', 'no-X11-forwarding'],
+    }) }
+
+    it { should have_user_resource_count(1) }
+    it { should contain_user('foo') }
+  end
+
+  context 'when authorized_keys is a hash and a specific ssh_authorized_key title' do
+    let(:params) do
+      {
+        :ssh_keys => {
+          'foo' => {
+            'type'   => 'ssh-rsa',
+            'public'    => 'FOO-S-RSA-PUBLIC-KEY',
+          },
+          'bar' => {
+            'type'   => 'ssh-rsa',
+            'public'    => 'BAR-S-RSA-PUBLIC-KEY',
+          },
+        },
+        :users       => {
+          'foo' => {
+            'comment' => 'Foo User',
+            'uid'     => 1000,
+          },
+        },
+        :accounts    => {
+          'foo' => {
+            'authorized_keys' => {
+              'bar' => {
+                'options' => ['no-pty', 'no-port-forwarding', 'no-X11-forwarding'],
+              },
+            },
+	  },
+        },
+        :ssh_authorized_key_title => '%{ssh_key} on %{user}',
+      }
+    end
+
+    it { should compile.with_all_deps }
+
+    it { should have_group_resource_count(0) }
+
+    it { should have_ssh_authorized_key_resource_count(2) }
+    it { should contain_ssh_authorized_key('foo on foo').with({ :user => 'foo' }) }
+    it { should contain_ssh_authorized_key('bar on foo').with({
       :user    => 'foo',
       :options => ['no-pty', 'no-port-forwarding', 'no-X11-forwarding'],
     }) }
@@ -505,10 +736,82 @@ describe 'accounts' do
     it { should have_group_resource_count(0) }
 
     it { should have_ssh_authorized_key_resource_count(4) }
-    it { should contain_ssh_authorized_key('foo-on-foo').with({ :ensure => nil }) }
-    it { should contain_ssh_authorized_key('bar-on-bar').with({ :ensure => nil }) }
-    it { should contain_ssh_authorized_key('baz-on-baz').with({ :ensure => nil }) }
-    it { should contain_ssh_authorized_key('qux-on-qux').with({ :ensure => nil }) }
+    it { should contain_ssh_authorized_key('foo-on-foo').with({ :ensure => :present }) }
+    it { should contain_ssh_authorized_key('bar-on-bar').with({ :ensure => :present }) }
+    it { should contain_ssh_authorized_key('baz-on-baz').with({ :ensure => :present }) }
+    it { should contain_ssh_authorized_key('qux-on-qux').with({ :ensure => :present }) }
+
+    it { should have_user_resource_count(4) }
+    it { should contain_user('foo').with({ :ensure => nil, :groups => 'foo', }) }
+    it { should contain_user('bar').with({ :ensure => nil, :groups => 'bar', }) }
+    it { should contain_user('baz').with({ :ensure => nil, :groups => 'foo', }) }
+    it { should contain_user('qux').with({ :ensure => nil, :groups => 'bar', }) }
+  end
+
+  context 'when adding a user group and a specific ssh_authorized_key title' do
+    let(:params) do
+      {
+        :ssh_keys => {
+          'foo' => {
+            'type'   => 'ssh-rsa',
+            'public'    => 'FOO-S-RSA-PUBLIC-KEY',
+          },
+          'bar' => {
+            'type'   => 'ssh-rsa',
+            'public'    => 'BAR-S-RSA-PUBLIC-KEY',
+          },
+          'baz' => {
+            'type'   => 'ssh-rsa',
+            'public'    => 'BAZ-S-RSA-PUBLIC-KEY',
+          },
+          'qux' => {
+            'type'   => 'ssh-rsa',
+            'public'    => 'QUX-S-RSA-PUBLIC-KEY',
+          },
+        },
+        :users       => {
+          'foo' => {
+            'comment' => 'Foo User',
+            'uid'     => 1000,
+          },
+          'bar' => {
+            'comment' => 'Bar User',
+            'uid'     => 1001,
+          },
+          'baz' => {
+            'comment' => 'Baz User',
+            'uid'     => 1002,
+          },
+          'qux' => {
+            'comment' => 'Qux User',
+            'uid'     => 1003,
+          },
+        },
+        :usergroups  => {
+          'foo' => [ 'foo', 'baz', ],
+          'bar' => [ 'bar', 'qux', ],
+        },
+        :accounts    => {
+          '@foo' => {
+            'groups' => [ 'foo', ],
+          },
+          '@bar' => {
+            'groups' => [ 'bar', ],
+          },
+        },
+        :ssh_authorized_key_title => '%{ssh_key} on %{user}',
+      }
+    end
+
+    it { should compile.with_all_deps }
+
+    it { should have_group_resource_count(0) }
+
+    it { should have_ssh_authorized_key_resource_count(4) }
+    it { should contain_ssh_authorized_key('foo on foo').with({ :ensure => :present }) }
+    it { should contain_ssh_authorized_key('bar on bar').with({ :ensure => :present }) }
+    it { should contain_ssh_authorized_key('baz on baz').with({ :ensure => :present }) }
+    it { should contain_ssh_authorized_key('qux on qux').with({ :ensure => :present }) }
 
     it { should have_user_resource_count(4) }
     it { should contain_user('foo').with({ :ensure => nil, :groups => 'foo', }) }
@@ -585,19 +888,19 @@ describe 'accounts' do
     }
     it {
       pending
-      should contain_ssh_authorized_key('foo-on-foo').with({ :ensure => nil })
+      should contain_ssh_authorized_key('foo-on-foo').with({ :ensure => :present })
     }
     it {
       pending
-      should contain_ssh_authorized_key('bar-on-bar').with({ :ensure => nil })
+      should contain_ssh_authorized_key('bar-on-bar').with({ :ensure => :present })
     }
     it {
       pending
-      should contain_ssh_authorized_key('baz-on-baz').with({ :ensure => nil })
+      should contain_ssh_authorized_key('baz-on-baz').with({ :ensure => :present })
     }
     it {
       pending
-      should contain_ssh_authorized_key('qux-on-qux').with({ :ensure => nil })
+      should contain_ssh_authorized_key('qux-on-qux').with({ :ensure => :present })
     }
     it {
       pending
@@ -684,14 +987,92 @@ describe 'accounts' do
     it { should have_group_resource_count(0) }
 
     it { should have_ssh_authorized_key_resource_count(4) }
-    it { should contain_ssh_authorized_key('foo-on-quux').with({ :ensure => nil }) }
+    it { should contain_ssh_authorized_key('foo-on-quux').with({ :ensure => :present }) }
     it { should contain_ssh_authorized_key('bar-on-corge').with({
-      :ensure  => nil,
+      :ensure  => :present,
       :options => ['no-pty', 'no-port-forwarding', 'no-X11-forwarding'],
     }) }
-    it { should contain_ssh_authorized_key('baz-on-quux').with({ :ensure => nil }) }
+    it { should contain_ssh_authorized_key('baz-on-quux').with({ :ensure => :present }) }
     it { should contain_ssh_authorized_key('qux-on-corge').with({
-      :ensure  => nil,
+      :ensure  => :present,
+      :options => ['no-pty', 'no-port-forwarding', 'no-X11-forwarding'],
+    }) }
+
+    it { should have_user_resource_count(0) }
+  end
+
+  context 'when adding a public keys of a user group and a specific ssh_authorized_key title' do
+    let(:params) do
+      {
+        :ssh_keys => {
+          'foo' => {
+            'type'   => 'ssh-rsa',
+            'public'    => 'FOO-S-RSA-PUBLIC-KEY',
+          },
+          'bar' => {
+            'type'   => 'ssh-rsa',
+            'public'    => 'BAR-S-RSA-PUBLIC-KEY',
+          },
+          'baz' => {
+            'type'   => 'ssh-rsa',
+            'public'    => 'BAZ-S-RSA-PUBLIC-KEY',
+          },
+          'qux' => {
+            'type'   => 'ssh-rsa',
+            'public'    => 'QUX-S-RSA-PUBLIC-KEY',
+          },
+        },
+        :users       => {
+          'foo' => {
+            'comment' => 'Foo User',
+            'uid'     => 1000,
+          },
+          'bar' => {
+            'comment' => 'Bar User',
+            'uid'     => 1001,
+          },
+          'baz' => {
+            'comment' => 'Baz User',
+            'uid'     => 1002,
+          },
+          'qux' => {
+            'comment' => 'Qux User',
+            'uid'     => 1003,
+          },
+        },
+        :usergroups  => {
+          'foo' => [ 'foo', 'baz', ],
+          'bar' => [ 'bar', 'qux', ],
+        },
+        :accounts    => {
+          'quux' => {
+            'authorized_keys' => [ '@foo', ],
+          },
+          'corge' => {
+            'authorized_keys' => {
+              '@bar' => {
+                'options' => ['no-pty', 'no-port-forwarding', 'no-X11-forwarding'],
+              }
+            },
+          },
+        },
+        :ssh_authorized_key_title => '%{ssh_key} on %{user}',
+      }
+    end
+
+    it { should compile.with_all_deps }
+
+    it { should have_group_resource_count(0) }
+
+    it { should have_ssh_authorized_key_resource_count(4) }
+    it { should contain_ssh_authorized_key('foo on quux').with({ :ensure => :present }) }
+    it { should contain_ssh_authorized_key('bar on corge').with({
+      :ensure  => :present,
+      :options => ['no-pty', 'no-port-forwarding', 'no-X11-forwarding'],
+    }) }
+    it { should contain_ssh_authorized_key('baz on quux').with({ :ensure => :present }) }
+    it { should contain_ssh_authorized_key('qux on corge').with({
+      :ensure  => :present,
       :options => ['no-pty', 'no-port-forwarding', 'no-X11-forwarding'],
     }) }
 
@@ -704,11 +1085,11 @@ describe 'accounts' do
         :ssh_keys => {
           'foo' => {
             'type'   => 'ssh-rsa',
-            'public'    => 'FOO-S-RSA-PUBLIC-KEY',
+            'public' => 'FOO-S-RSA-PUBLIC-KEY',
           },
           'bar' => {
             'type'   => 'ssh-rsa',
-            'public'    => 'BAR-S-RSA-PUBLIC-KEY',
+            'public' => 'BAR-S-RSA-PUBLIC-KEY',
           },
         },
         :users       => {
@@ -799,8 +1180,47 @@ describe 'accounts' do
     it { should have_group_resource_count(0) }
 
     it { should have_ssh_authorized_key_resource_count(2) }
-    it { should contain_ssh_authorized_key('foo-on-foo').with({ :ensure => nil }) }
+    it { should contain_ssh_authorized_key('foo-on-foo').with({ :ensure => :present }) }
     it { should contain_ssh_authorized_key('bar-on-foo').with({ :ensure => :absent }) }
+
+    it { should have_user_resource_count(1) }
+    it { should contain_user('foo') }
+  end
+
+  context 'when removing a public key and a specific ssh_authorized_key title' do
+    let(:params) do
+      {
+        :ssh_keys => {
+          'foo' => {
+            'type'   => 'ssh-rsa',
+            'public'    => 'FOO-S-RSA-PUBLIC-KEY',
+          },
+          'bar' => {
+            'ensure' => 'absent',
+            'type'   => 'ssh-rsa',
+            'public'    => 'BAR-S-RSA-PUBLIC-KEY',
+          },
+        },
+        :users       => {
+          'foo' => {
+            'comment' => 'Foo User',
+            'uid'     => 1000,
+          },
+        },
+        :accounts    => {
+          'foo' => { },
+        },
+        :ssh_authorized_key_title => '%{ssh_key} on %{user}',
+      }
+    end
+
+    it { should compile.with_all_deps }
+
+    it { should have_group_resource_count(0) }
+
+    it { should have_ssh_authorized_key_resource_count(2) }
+    it { should contain_ssh_authorized_key('foo on foo').with({ :ensure => :present }) }
+    it { should contain_ssh_authorized_key('bar on foo').with({ :ensure => :absent }) }
 
     it { should have_user_resource_count(1) }
     it { should contain_user('foo') }
@@ -857,9 +1277,7 @@ describe 'accounts' do
         },
         :accounts    => {
           'foo' => { # An account with multiple public keys
-            'authorized_keys' => [ 'bar', 'qux', 'quux', 'corge', ],
-          },
-          'bar' => { # An account with a single public key
+            'authorized_keys' => [ 'qux', 'quux', 'corge', ],
           },
 	  'baz' => { # An account without public key
           },
@@ -874,19 +1292,99 @@ describe 'accounts' do
 
     it { should have_group_resource_count(0) }
 
-    it { should have_ssh_authorized_key_resource_count(8) }
-    it { should contain_ssh_authorized_key('foo-on-foo').with({ :ensure => nil }) }
+    it { should have_ssh_authorized_key_resource_count(7) }
+    it { should contain_ssh_authorized_key('foo-on-foo').with({ :ensure => :present }) }
     it { should contain_ssh_authorized_key('bar-on-foo').with({ :ensure => :absent }) }
-    it { should contain_ssh_authorized_key('qux-on-foo').with({ :ensure => nil }) }
-    it { should contain_ssh_authorized_key('quux-on-foo').with({ :ensure => nil }) }
-    it { should contain_ssh_authorized_key('corge-on-foo').with({ :ensure => nil }) }
-    it { should contain_ssh_authorized_key('bar-on-bar').with({ :ensure => :absent }) }
+    it { should contain_ssh_authorized_key('qux-on-foo').with({ :ensure => :present }) }
+    it { should contain_ssh_authorized_key('quux-on-foo').with({ :ensure => :present }) }
+    it { should contain_ssh_authorized_key('corge-on-foo').with({ :ensure => :present }) }
     it { should contain_ssh_authorized_key('bar-on-baz').with({ :ensure => :absent }) }
     it { should contain_ssh_authorized_key('bar-on-qux').with({ :ensure => :absent }) }
 
-    it { should have_user_resource_count(5) }
+    it { should have_user_resource_count(4) }
     it { should contain_user('foo').with({ :ensure => nil }) }
-    it { should contain_user('bar').with({ :ensure => nil }) }
+    it { should contain_user('baz').with({ :ensure => nil }) }
+    it { should contain_user('qux').with({ :ensure => :absent }) }
+  end
+
+  context 'when complex scenario and a specific ssh_authorized_key title' do
+    let(:params) do
+      {
+        :ssh_keys => {
+          'foo' => {
+            'type'   => 'ssh-rsa',
+            'public'    => 'FOO-S-RSA-PUBLIC-KEY',
+          },
+          'bar' => {
+            'ensure' => 'absent', # We want to remove the public key but not the user
+            'type'   => 'ssh-rsa',
+            'public'    => 'BAR-S-RSA-PUBLIC-KEY',
+          },
+          'qux' => {
+            'type'   => 'ssh-rsa',
+            'public'    => 'QUX-S-RSA-PUBLIC-KEY',
+          },
+          'quux' => {
+            'type'   => 'ssh-rsa',
+            'public'    => 'QUUX-S-RSA-PUBLIC-KEY',
+          },
+          'corge' => { # is just a public key, without user associated
+            'type'   => 'ssh-rsa',
+            'public'    => 'CORGE-S-RSA-PUBLIC-KEY',
+          },
+        },
+        :users       => {
+          'foo' => {
+            'comment' => 'Foo User',
+            'uid'     => 1000,
+          },
+          'bar' => {
+            'comment' => 'Bar User',
+            'uid'     => 1001,
+          },
+          'baz' => {
+            'comment' => 'Baz User',
+            'uid'     => 1002,
+          },
+          'qux' => {
+            'comment' => 'Qux User',
+            'uid'     => 1003,
+          },
+          'quux' => {
+            'ensure'  => 'absent', # Do we want to remove its public key also ?
+            'comment' => 'Quux User',
+            'uid'     => 1004,
+          }
+        },
+        :accounts    => {
+          'foo' => { # An account with multiple public keys
+            'authorized_keys' => [ 'qux', 'quux', 'corge', ],
+          },
+	  'baz' => { # An account without public key
+          },
+          'qux' => { # A removed account
+            'ensure' => 'absent',
+          },
+        },
+        :ssh_authorized_key_title => '%{ssh_key} on %{user}',
+      }
+    end
+
+    it { should compile.with_all_deps }
+
+    it { should have_group_resource_count(0) }
+
+    it { should have_ssh_authorized_key_resource_count(7) }
+    it { should contain_ssh_authorized_key('foo on foo').with({ :ensure => :present }) }
+    it { should contain_ssh_authorized_key('bar on foo').with({ :ensure => :absent }) }
+    it { should contain_ssh_authorized_key('qux on foo').with({ :ensure => :present }) }
+    it { should contain_ssh_authorized_key('quux on foo').with({ :ensure => :present }) }
+    it { should contain_ssh_authorized_key('corge on foo').with({ :ensure => :present }) }
+    it { should contain_ssh_authorized_key('bar on baz').with({ :ensure => :absent }) }
+    it { should contain_ssh_authorized_key('bar on qux').with({ :ensure => :absent }) }
+
+    it { should have_user_resource_count(4) }
+    it { should contain_user('foo').with({ :ensure => nil }) }
     it { should contain_user('baz').with({ :ensure => nil }) }
     it { should contain_user('qux').with({ :ensure => :absent }) }
   end
