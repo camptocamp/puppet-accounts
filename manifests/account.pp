@@ -20,7 +20,7 @@ define accounts::account(
       }
     )
   } else {
-    if $::accounts::users[$user] != undef {
+    if has_key($::accounts::users, $user) {
       ensure_resource(
         user,
         $name,
@@ -42,8 +42,8 @@ define accounts::account(
           "-on-${name}"
         )
         accounts::authorized_key { $_authorized_keys:
-          user   => $name,
-          target => $authorized_keys_target,
+          account => $name,
+          target  => $authorized_keys_target,
         }
       } elsif is_hash($authorized_keys) {
         $tmp_hash = merge({"${name}" => {},}, $authorized_keys)
@@ -80,10 +80,10 @@ define accounts::account(
     }
 
     $keys_to_remove = suffix(keys(absents($::accounts::ssh_keys)), "-on-${name}")
-    ssh_authorized_key { $keys_to_remove:
-      ensure => absent,
-      user   => $name,
-      target => $authorized_keys_target,
+    accounts::authorized_key { $keys_to_remove:
+      ensure  => absent,
+      account => $name,
+      target  => $authorized_keys_target,
     }
   }
 }
