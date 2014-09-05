@@ -742,10 +742,10 @@ describe 'accounts' do
     it { should contain_ssh_authorized_key('qux-on-qux').with({ :ensure => :present }) }
 
     it { should have_user_resource_count(4) }
-    it { should contain_user('foo').with({ :ensure => nil, :groups => 'foo', }) }
-    it { should contain_user('bar').with({ :ensure => nil, :groups => 'bar', }) }
-    it { should contain_user('baz').with({ :ensure => nil, :groups => 'foo', }) }
-    it { should contain_user('qux').with({ :ensure => nil, :groups => 'bar', }) }
+    it { should contain_user('foo').with({ :ensure => :present, :groups => 'foo', }) }
+    it { should contain_user('bar').with({ :ensure => :present, :groups => 'bar', }) }
+    it { should contain_user('baz').with({ :ensure => :present, :groups => 'foo', }) }
+    it { should contain_user('qux').with({ :ensure => :present, :groups => 'bar', }) }
   end
 
   context 'when adding a user group and a specific ssh_authorized_key title' do
@@ -814,10 +814,10 @@ describe 'accounts' do
     it { should contain_ssh_authorized_key('qux on qux').with({ :ensure => :present }) }
 
     it { should have_user_resource_count(4) }
-    it { should contain_user('foo').with({ :ensure => nil, :groups => 'foo', }) }
-    it { should contain_user('bar').with({ :ensure => nil, :groups => 'bar', }) }
-    it { should contain_user('baz').with({ :ensure => nil, :groups => 'foo', }) }
-    it { should contain_user('qux').with({ :ensure => nil, :groups => 'bar', }) }
+    it { should contain_user('foo').with({ :ensure => :present, :groups => 'foo', }) }
+    it { should contain_user('bar').with({ :ensure => :present, :groups => 'bar', }) }
+    it { should contain_user('baz').with({ :ensure => :present, :groups => 'foo', }) }
+    it { should contain_user('qux').with({ :ensure => :present, :groups => 'bar', }) }
   end
 
   context 'when adding a user group with ambiguous groups' do
@@ -1302,8 +1302,8 @@ describe 'accounts' do
     it { should contain_ssh_authorized_key('bar-on-qux').with({ :ensure => :absent }) }
 
     it { should have_user_resource_count(4) }
-    it { should contain_user('foo').with({ :ensure => nil }) }
-    it { should contain_user('baz').with({ :ensure => nil }) }
+    it { should contain_user('foo').with({ :ensure => :present }) }
+    it { should contain_user('baz').with({ :ensure => :present }) }
     it { should contain_user('qux').with({ :ensure => :absent }) }
   end
 
@@ -1384,8 +1384,8 @@ describe 'accounts' do
     it { should contain_ssh_authorized_key('bar on qux').with({ :ensure => :absent }) }
 
     it { should have_user_resource_count(4) }
-    it { should contain_user('foo').with({ :ensure => nil }) }
-    it { should contain_user('baz').with({ :ensure => nil }) }
+    it { should contain_user('foo').with({ :ensure => :present }) }
+    it { should contain_user('baz').with({ :ensure => :present }) }
     it { should contain_user('qux').with({ :ensure => :absent }) }
   end
 

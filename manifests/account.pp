@@ -1,10 +1,11 @@
 # See README.md for details.
 define accounts::account(
-  $ensure                 = undef,
-  $user                   = $name,
-  $groups                 = [],
-  $authorized_keys        = [],
-  $authorized_keys_target = undef,
+  $ensure                   = present,
+  $user                     = $name,
+  $groups                   = [],
+  $authorized_keys          = [],
+  $authorized_keys_target   = undef,
+  $ssh_authorized_key_title = $::accounts::ssh_authorized_key_title,
 ) {
   if $user =~ /^@(\S+)$/ {
     if ! has_key($::accounts::usergroups, $1) {
@@ -14,9 +15,10 @@ define accounts::account(
       accounts::account,
       $::accounts::usergroups[$1],
       {
-        ensure          => $ensure,
-        groups          => $groups,
-        authorized_keys => $authorized_keys,
+        ensure                   => $ensure,
+        groups                   => $groups,
+        authorized_keys          => $authorized_keys,
+        ssh_authorized_key_title => $ssh_authorized_key_title,
       }
     )
   } else {
@@ -42,8 +44,9 @@ define accounts::account(
           "-on-${name}"
         )
         accounts::authorized_key { $_authorized_keys:
-          account => $name,
-          target  => $authorized_keys_target,
+          account                  => $name,
+          target                   => $authorized_keys_target,
+          ssh_authorized_key_title => $ssh_authorized_key_title,
         }
       } elsif is_hash($authorized_keys) {
         $tmp_hash = merge({"${name}" => {},}, $authorized_keys)
@@ -53,7 +56,10 @@ define accounts::account(
         create_resources(
           accounts::authorized_key,
           $_authorized_keys,
-          { target => $authorized_keys_target, }
+          {
+            target                   => $authorized_keys_target,
+            ssh_authorized_key_title => $ssh_authorized_key_title,
+          }
         )
       } else {
         fail 'authorized_keys must be a String, an Array or a Hash'
@@ -81,9 +87,10 @@ define accounts::account(
 
     $keys_to_remove = suffix(keys(absents($::accounts::ssh_keys)), "-on-${name}")
     accounts::authorized_key { $keys_to_remove:
-      ensure  => absent,
-      account => $name,
-      target  => $authorized_keys_target,
+      ensure                   => absent,
+      account                  => $name,
+      target                   => $authorized_keys_target,
+      ssh_authorized_key_title => $ssh_authorized_key_title,
     }
   }
 }
