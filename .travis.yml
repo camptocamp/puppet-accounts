@@ -7,6 +7,7 @@ after_success:
 env:
   global:
     - PUBLISHER_LOGIN=camptocamp
+    - secure: "bB20F09Yuj4OdELOAczuhd8MobDGbZ9FOH4LF1N34htgfJ/HrT57chodY40543Hgn2dbcXGlVZTh5q637soYyE2jnkfEGT+nVZMUqY+Pu5ecrygTJpCnIVqWcCG2Bx+/O0+FLfIjt/aDD34jVACWcx7LlqwXUpvU1lQQAgZawf4="
 matrix:
   fast_finish: true
   include:
