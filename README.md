@@ -1,6 +1,7 @@
 Accounts
 ========
 
+[![Puppet Forge](http://img.shields.io/puppetforge/v/camptocamp/accounts.svg)](https://forge.puppetlabs.com/camptocamp/accounts)
 [![Build Status](https://travis-ci.org/camptocamp/puppet-accounts.png?branch=master)](https://travis-ci.org/camptocamp/puppet-accounts)
 
 Usage
