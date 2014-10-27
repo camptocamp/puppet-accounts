@@ -43,10 +43,12 @@ define accounts::account(
           unique( delete_undef_values( flatten( [$authorized_keys, $name] ) ) ),
           "-on-${name}"
         )
-        accounts::authorized_key { $_authorized_keys:
-          account                  => $name,
-          target                   => $authorized_keys_target,
-          ssh_authorized_key_title => $ssh_authorized_key_title,
+        if has_key($::accounts::ssh_keys, $name) and $::accounts::ssh_keys[$name]['ensure'] != 'absent' {
+          accounts::authorized_key { $_authorized_keys:
+            account                  => $name,
+            target                   => $authorized_keys_target,
+            ssh_authorized_key_title => $ssh_authorized_key_title,
+          }
         }
       } elsif is_hash($authorized_keys) {
         $tmp_hash = merge({"${name}" => {},}, $authorized_keys)
