@@ -1,10 +1,10 @@
 # See README.md for details.
 define accounts::authorized_key(
-  $ensure                  = present,
-  $ssh_key                 = regsubst($name, '^(\S+)-on-\S+$', '\1'),
-  $account                 = regsubst($name, '^\S+-on-(\S+)$', '\1'),
-  $options                 = undef,
-  $target                  = undef,
+  $ensure                   = present,
+  $ssh_key                  = regsubst($name, '^(\S+)-on-\S+$', '\1'),
+  $account                  = regsubst($name, '^\S+-on-(\S+)$', '\1'),
+  $options                  = undef,
+  $target                   = undef,
   $ssh_authorized_key_title = $::accounts::ssh_authorized_key_title,
 ) {
   validate_hash($::accounts::ssh_keys)
@@ -21,9 +21,10 @@ define accounts::authorized_key(
       accounts::authorized_key,
       suffix($::accounts::usergroups[$1], "-on-${account}"),
       {
-        ensure  => $ensure,
-        options => $options,
-        target  => $target,
+        ensure                   => $ensure,
+        options                  => $options,
+        target                   => $target,
+        ssh_authorized_key_title => $ssh_authorized_key_title,
       }
     )
   } else {
