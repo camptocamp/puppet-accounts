@@ -39,16 +39,15 @@ define accounts::account(
 
     if $ensure != absent {
       if is_string($authorized_keys) or is_array($authorized_keys) {
-        $_authorized_keys = suffix(
-          unique( delete_undef_values( flatten( [$authorized_keys, $name] ) ) ),
-          "-on-${name}"
-        )
-        if has_key($::accounts::ssh_keys, $name) and $::accounts::ssh_keys[$name]['ensure'] != 'absent' {
-          accounts::authorized_key { $_authorized_keys:
-            account                  => $name,
-            target                   => $authorized_keys_target,
-            ssh_authorized_key_title => $ssh_authorized_key_title,
-          }
+        $user_has_key = has_key($::accounts::ssh_keys, $name) and $::accounts::ssh_keys[$name]['ensure'] != 'absent'
+        $_authorized_keys = $user_has_key ? {
+          true  => suffix(unique( delete_undef_values( flatten( [$authorized_keys, $name] ) ) ),"-on-${name}"),
+          false => suffix(unique( delete_undef_values( flatten( [$authorized_keys] ) ) ),"-on-${name}"),
+        }
+        accounts::authorized_key { $_authorized_keys:
+          account                  => $name,
+          target                   => $authorized_keys_target,
+          ssh_authorized_key_title => $ssh_authorized_key_title,
         }
       } elsif is_hash($authorized_keys) {
         $tmp_hash = merge({"${name}" => {},}, $authorized_keys)
