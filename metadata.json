@@ -1,6 +1,6 @@
 {
   "name": "camptocamp-accounts",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "author": "camptocamp",
   "summary": "Puppet module for Managing SSH keys, users and groups",
   "license": "Apache 2.0",
@@ -36,7 +36,7 @@
       "operatingsystemrelease": [
         "10.04",
         "12.04",
-	"14.04"
+        "14.04"
       ]
     },
     {

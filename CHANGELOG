@@ -1,3 +1,8 @@
+2014-10-28 - Version 1.0.2
+
+- Fix an issue when using ssh_authorized_key_title and usergroup
+- Fix an issue when adding a user without ssh key defined
+
 2014-10-20 - Version 1.0.1
 
 - Really setup automatic Forge release
