@@ -7,18 +7,17 @@ Accounts
 Usage
 -----
 
+First, you have to declare your `ssh_keys`, `users` and `usergroups` hashes:
+
 ```puppet
 class { 'accounts':
-  groups                   => hiera_hash('accounts::groups', {}),
-  ssh_keys                 => hiera_hash('accounts::ssh_keys', {}),
-  users                    => hiera_hash('accounts::users', {}),
-  usergroups               => hiera_hash('accounts::usergroups', {}),
-  accounts                 => hiera_hash('accounts::accounts', {}),
-  ssh_authorized_key_title => '%{ssh_keys[\'%{ssh_key}\'][\'comment\']} on %{user}',
+  ssh_keys   => hiera_hash('accounts::ssh_keys', {}),
+  users      => hiera_hash('accounts::users', {}),
+  usergroups => hiera_hash('accounts::usergroups', {}),
 }
 ```
 
-### common.yaml
+Example hiera YAML file:
 ```
 ---
 accounts::ssh_keys:
@@ -52,76 +51,23 @@ accounts::usergroups:
   bar:
     - baz
     - qux
-
-# Create foo and bar accounts on every node
-accounts::accounts:
-  foo:
-    groups:
-      - foo
-    authorized_keys:
-      - foo
-      - bar
-      - baz
-  bar:
-    groups:
-      - foo
-      - bar
-      - baz
-    authorized_keys:
-      - bar
-  @foo:
-    groups:
-      - qux
 ```
 
-### foo.example.com.yaml
+Then you can create accounts on your node with the `accounts::account` defined type.
+
+```puppet
+accounts::account { 'foo': }
 ```
----
-accounts::groups:
-  foo:
-    gid: 1000
-  bar:
-    system: true
+Creates a `foo` user if it exists in `$::accounts::users` and at allow its public key if it exists in `$::accounts::ssh_keys`.
 
-accounts::ssh_keys:
-  baz:
-    type: ssh-rsa
-    private: BAZ-S-PRIVATE-KEY
-    public: BAZ-S-RSA-PUBLIC-KEY
-
-accounts::users:
-  baz:
-    uid: 1002
-
-# Create baz accounts on foo.example.com.yaml only
-accounts::accounts:
-  baz:
-    groups:
-      - foo
-    authorized_keys:
-      - @foo
+```puppet
+accounts::account { 'bar':
+  authorized_keys => ['@foo', 'baz'],
+}
 ```
+Creates a `bar` user if it exists in `$::accounts::users` and at allow its public key, everyone's in the`foo` usergroup's public key and `baz`'s one if it exists in `$::accounts::ssh_keys`.
 
-### bar.example.com.yaml
+```puppet
+accounts::account { '@foo': }
 ```
----
-accounts::ssh_keys:
-  quux:
-    type: ssh-rsa
-    public: QUUX-S-RSA-PUBLIC-KEY
-
-accounts::users:
-  quux:
-    uid: 1003
-
-# Create quux accounts on bar.example.com.yaml only
-accounts::accounts:
-  quux:
-    groups:
-      - quux
-    authorized_keys:
-      quux: {}
-      foo:
-        options: ['no-pty', 'no-port-forwarding', 'no-X11-forwarding']
-        target: /etc/sshd/authorized_keys/foo
-```
+Create a user for every user in `foo` usergroup and allow its public key.
