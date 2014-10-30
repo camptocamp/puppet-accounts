@@ -5,6 +5,7 @@ define accounts::account(
   $groups                   = [],
   $authorized_keys          = [],
   $authorized_keys_target   = undef,
+  $purge_ssh_keys           = $::accounts::purge_ssh_keys,
   $ssh_authorized_key_title = $::accounts::ssh_authorized_key_title,
 ) {
   if $user =~ /^@(\S+)$/ {
@@ -29,9 +30,10 @@ define accounts::account(
         merge(
           $::accounts::users[$name],
           {
-            ensure     => $ensure,
-            groups     => $groups,
-            managehome => true,
+            ensure         => $ensure,
+            groups         => $groups,
+            managehome     => true,
+            purge_ssh_keys => $purge_ssh_keys,
           }
         )
       )

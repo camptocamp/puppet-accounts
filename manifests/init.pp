@@ -1,12 +1,13 @@
 # See README.md for details.
 class accounts(
-  $groups                  = {},
-  $ssh_keys                = {},
-  $users                   = {},
-  $usergroups              = {},
-  $accounts                = {},
-  $start_uid               = undef,
-  $start_gid               = undef,
+  $groups                   = {},
+  $ssh_keys                 = {},
+  $users                    = {},
+  $usergroups               = {},
+  $accounts                 = {},
+  $start_uid                = undef,
+  $start_gid                = undef,
+  $purge_ssh_keys           = false,
   $ssh_authorized_key_title = '%{ssh_key}-on-%{account}',
 ) {
   include ::accounts::config
