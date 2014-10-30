@@ -32,6 +32,7 @@ define accounts::account(
           {
             ensure         => $ensure,
             groups         => $groups,
+            home           => "/home/${$name}",
             managehome     => true,
             purge_ssh_keys => $purge_ssh_keys,
           }
