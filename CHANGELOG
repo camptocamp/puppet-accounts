@@ -1,3 +1,8 @@
+2014-10-28 - Version 1.1.0
+
+- Add purge-ssh-key support
+- Remove puppet < 3.6 support
+
 2014-10-28 - Version 1.0.2
 
 - Fix an issue when using ssh_authorized_key_title and usergroup
