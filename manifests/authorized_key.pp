@@ -30,13 +30,18 @@ define accounts::authorized_key(
   } else {
     if has_key($::accounts::ssh_keys, $ssh_key) {
       $_ssh_authorized_key_title = strformat($ssh_authorized_key_title)
+
+      $_user = $target ? {
+        undef   => $account,
+        default => 'root',
+      }
       ssh_authorized_key { $_ssh_authorized_key_title:
         ensure  => $ensure,
         key     => $::accounts::ssh_keys[$ssh_key]['public'],
         options => $options,
         target  => strformat($target),
         type    => $::accounts::ssh_keys[$ssh_key]['type'],
-        user    => $account,
+        user    => $_user,
       }
     }
   }
