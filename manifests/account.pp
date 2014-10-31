@@ -8,6 +8,7 @@ define accounts::account(
   $purge_ssh_keys           = $::accounts::purge_ssh_keys,
   $ssh_authorized_key_title = $::accounts::ssh_authorized_key_title,
 ) {
+  $account = $user # for strformat mapping...
   if $user =~ /^@(\S+)$/ {
     if ! has_key($::accounts::usergroups, $1) {
       fail "Can't find usergroup : ${1}"
@@ -26,6 +27,10 @@ define accounts::account(
     )
   } else {
     if has_key($::accounts::users, $user) {
+      $_purge_ssh_keys = $purge_ssh_keys ? {
+        true  => strformat($authorized_keys_target),
+        false => false,
+      }
       ensure_resource(
         user,
         $name,
@@ -36,7 +41,7 @@ define accounts::account(
             groups         => $groups,
             home           => "/home/${$name}",
             managehome     => true,
-            purge_ssh_keys => $purge_ssh_keys,
+            purge_ssh_keys => $_purge_ssh_keys,
           }
         )
       )
