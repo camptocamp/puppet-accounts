@@ -19,6 +19,8 @@ define accounts::account(
         ensure                   => $ensure,
         groups                   => $groups,
         authorized_keys          => $authorized_keys,
+        authorized_keys_target   => $authorized_keys_target,
+        purge_ssh_keys           => $purge_ssh_keys,
         ssh_authorized_key_title => $ssh_authorized_key_title,
       }
     )
