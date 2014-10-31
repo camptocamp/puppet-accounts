@@ -27,9 +27,10 @@ define accounts::account(
     )
   } else {
     if has_key($::accounts::users, $user) {
-      $_purge_ssh_keys = $purge_ssh_keys ? {
-        true  => strformat($authorized_keys_target),
-        false => false,
+      if $purge_ssh_keys and $authorized_keys_target {
+        $_purge_ssh_keys = strformat($authorized_keys_target)
+      } else {
+        $_purge_ssh_keys = false
       }
       ensure_resource(
         user,
