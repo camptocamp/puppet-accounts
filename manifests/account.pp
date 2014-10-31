@@ -35,14 +35,14 @@ define accounts::account(
         user,
         $name,
         merge(
-          $::accounts::users[$name],
           {
             ensure         => $ensure,
             groups         => $groups,
             home           => "/home/${$name}",
             managehome     => true,
             purge_ssh_keys => $_purge_ssh_keys,
-          }
+          },
+          $::accounts::users[$name]
         )
       )
     }
