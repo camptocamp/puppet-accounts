@@ -1,3 +1,12 @@
+2014-11-04 - Version 1.1.1
+
+- Fix when no target
+- Fix when purging with no target
+- Inverse hashes order in merge so that we can override params in hiera
+- Set user to root when using a target
+- Allow string formating for target
+- Forward authorized_keys_target and purge_ssh_keys when using usergroups
+
 2014-10-28 - Version 1.1.0
 
 - Add purge-ssh-key support
