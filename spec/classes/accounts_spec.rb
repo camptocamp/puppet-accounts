@@ -7,7 +7,7 @@ describe 'accounts' do
   } }
 
   context 'with no parameters' do
-    it { should compile.with_all_deps }
+    it { is_expected.to compile.with_all_deps }
   end
 
   context 'whith groups only' do
@@ -21,16 +21,16 @@ describe 'accounts' do
       }
     end
 
-    it { should compile.with_all_deps }
+    it { is_expected.to compile.with_all_deps }
 
-    it { should have_group_resource_count(3) }
-    it { should contain_group('foo').with({ :ensure => nil }) }
-    it { should contain_group('bar').with({ :ensure => nil }) }
-    it { should contain_group('baz').with({ :ensure => :absent }) }
+    it { is_expected.to have_group_resource_count(3) }
+    it { is_expected.to contain_group('foo').with({ :ensure => nil }) }
+    it { is_expected.to contain_group('bar').with({ :ensure => nil }) }
+    it { is_expected.to contain_group('baz').with({ :ensure => :absent }) }
 
-    it { should have_ssh_authorized_key_resource_count(0) }
+    it { is_expected.to have_ssh_authorized_key_resource_count(0) }
 
-    it { should have_user_resource_count(0) }
+    it { is_expected.to have_user_resource_count(0) }
   end
 
   context 'with ssh_keys only' do
@@ -55,13 +55,13 @@ describe 'accounts' do
       }
     end
 
-    it { should compile.with_all_deps }
+    it { is_expected.to compile.with_all_deps }
 
-    it { should have_group_resource_count(0) }
+    it { is_expected.to have_group_resource_count(0) }
 
-    it { should have_ssh_authorized_key_resource_count(0) }
+    it { is_expected.to have_ssh_authorized_key_resource_count(0) }
 
-    it { should have_user_resource_count(0) }
+    it { is_expected.to have_user_resource_count(0) }
   end
 
   context 'with users only' do
@@ -85,14 +85,14 @@ describe 'accounts' do
       }
     end
 
-    it { should compile.with_all_deps }
+    it { is_expected.to compile.with_all_deps }
 
-    it { should have_group_resource_count(0) }
+    it { is_expected.to have_group_resource_count(0) }
 
-    it { should have_ssh_authorized_key_resource_count(0) }
+    it { is_expected.to have_ssh_authorized_key_resource_count(0) }
 
-    it { should have_user_resource_count(1) }
-    it { should contain_user('baz').with({ :ensure => :absent })}
+    it { is_expected.to have_user_resource_count(1) }
+    it { is_expected.to contain_user('baz').with({ :ensure => :absent })}
   end
 
   context 'when adding an account with no public key' do
@@ -110,14 +110,14 @@ describe 'accounts' do
       }
     end
 
-    it { should compile.with_all_deps }
+    it { is_expected.to compile.with_all_deps }
 
-    it { should have_group_resource_count(0) }
+    it { is_expected.to have_group_resource_count(0) }
 
-    it { should have_ssh_authorized_key_resource_count(0) }
+    it { is_expected.to have_ssh_authorized_key_resource_count(0) }
 
-    it { should have_user_resource_count(1) }
-    it { should contain_user('foo') }
+    it { is_expected.to have_user_resource_count(1) }
+    it { is_expected.to contain_user('foo') }
   end
 
   context 'when adding an account with no user' do
@@ -135,17 +135,17 @@ describe 'accounts' do
       }
     end
 
-    it { should compile.with_all_deps }
+    it { is_expected.to compile.with_all_deps }
 
-    it { should have_group_resource_count(0) }
+    it { is_expected.to have_group_resource_count(0) }
 
-    it { should have_ssh_authorized_key_resource_count(1) }
-    it { should contain_ssh_authorized_key('foo-on-foo').with({
+    it { is_expected.to have_ssh_authorized_key_resource_count(1) }
+    it { is_expected.to contain_ssh_authorized_key('foo-on-foo').with({
       :type => 'ssh-rsa',
       :key  => 'FOO-S-RSA-PUBLIC-KEY',
     })}
 
-    it { should have_user_resource_count(0) }
+    it { is_expected.to have_user_resource_count(0) }
   end
 
   context 'when adding an account with no user and a specific ssh_authorized_key title' do
@@ -165,17 +165,17 @@ describe 'accounts' do
       }
     end
 
-    it { should compile.with_all_deps }
+    it { is_expected.to compile.with_all_deps }
 
-    it { should have_group_resource_count(0) }
+    it { is_expected.to have_group_resource_count(0) }
 
-    it { should have_ssh_authorized_key_resource_count(1) }
-    it { should contain_ssh_authorized_key('Mr. Foo on foo').with({
+    it { is_expected.to have_ssh_authorized_key_resource_count(1) }
+    it { is_expected.to contain_ssh_authorized_key('Mr. Foo on foo').with({
       :type => 'ssh-rsa',
       :key  => 'FOO-S-RSA-PUBLIC-KEY',
     })}
 
-    it { should have_user_resource_count(0) }
+    it { is_expected.to have_user_resource_count(0) }
   end
 
   context 'when adding an account with a private key' do
@@ -200,20 +200,20 @@ describe 'accounts' do
       }
     end
 
-    it { should compile.with_all_deps }
+    it { is_expected.to compile.with_all_deps }
 
-    it { should have_group_resource_count(0) }
+    it { is_expected.to have_group_resource_count(0) }
 
-    it { should have_ssh_authorized_key_resource_count(1) }
-    it { should contain_ssh_authorized_key('foo-on-foo').with({
+    it { is_expected.to have_ssh_authorized_key_resource_count(1) }
+    it { is_expected.to contain_ssh_authorized_key('foo-on-foo').with({
       :key  => 'FOO-S-RSA-PUBLIC-KEY',
       :type => 'ssh-rsa',
     }) }
 
-    it { should have_user_resource_count(1) }
-    it { should contain_user('foo') }
+    it { is_expected.to have_user_resource_count(1) }
+    it { is_expected.to contain_user('foo') }
 
-    it { should contain_exec("/bin/echo 'FOO-S-RSA-PRIVATE-KEY' > ~foo/.ssh/id_rsa").with({
+    it { is_expected.to contain_exec("/bin/echo 'FOO-S-RSA-PRIVATE-KEY' > ~foo/.ssh/id_rsa").with({
       :unless => '/usr/bin/test -f ~foo/.ssh/id_rsa',
     })}
   end
@@ -241,20 +241,20 @@ describe 'accounts' do
       }
     end
 
-    it { should compile.with_all_deps }
+    it { is_expected.to compile.with_all_deps }
 
-    it { should have_group_resource_count(0) }
+    it { is_expected.to have_group_resource_count(0) }
 
-    it { should have_ssh_authorized_key_resource_count(1) }
-    it { should contain_ssh_authorized_key('foo on foo').with({
+    it { is_expected.to have_ssh_authorized_key_resource_count(1) }
+    it { is_expected.to contain_ssh_authorized_key('foo on foo').with({
       :key  => 'FOO-S-RSA-PUBLIC-KEY',
       :type => 'ssh-rsa',
     }) }
 
-    it { should have_user_resource_count(1) }
-    it { should contain_user('foo') }
+    it { is_expected.to have_user_resource_count(1) }
+    it { is_expected.to contain_user('foo') }
 
-    it { should contain_exec("/bin/echo 'FOO-S-RSA-PRIVATE-KEY' > ~foo/.ssh/id_rsa").with({
+    it { is_expected.to contain_exec("/bin/echo 'FOO-S-RSA-PRIVATE-KEY' > ~foo/.ssh/id_rsa").with({
       :unless => '/usr/bin/test -f ~foo/.ssh/id_rsa',
     })}
   end
@@ -276,14 +276,14 @@ describe 'accounts' do
       }
     end
 
-    it { should compile.with_all_deps }
+    it { is_expected.to compile.with_all_deps }
 
-    it { should have_group_resource_count(0) }
+    it { is_expected.to have_group_resource_count(0) }
 
-    it { should have_ssh_authorized_key_resource_count(0) }
+    it { is_expected.to have_ssh_authorized_key_resource_count(0) }
 
-    it { should have_user_resource_count(1) }
-    it { should contain_user('foo').with({ :groups => [ 'foo', ] }) }
+    it { is_expected.to have_user_resource_count(1) }
+    it { is_expected.to contain_user('foo').with({ :groups => [ 'foo', ] }) }
   end
 
   context 'when adding an account in a group declared' do
@@ -306,15 +306,15 @@ describe 'accounts' do
       }
     end
 
-    it { should compile.with_all_deps }
+    it { is_expected.to compile.with_all_deps }
 
-    it { should have_group_resource_count(1) }
-    it { should contain_group('foo').with({ :ensure => nil }) }
+    it { is_expected.to have_group_resource_count(1) }
+    it { is_expected.to contain_group('foo').with({ :ensure => nil }) }
 
-    it { should have_ssh_authorized_key_resource_count(0) }
+    it { is_expected.to have_ssh_authorized_key_resource_count(0) }
 
-    it { should have_user_resource_count(1) }
-    it { should contain_user('foo').with({ :groups => [ 'foo', ] }) }
+    it { is_expected.to have_user_resource_count(1) }
+    it { is_expected.to contain_user('foo').with({ :groups => [ 'foo', ] }) }
   end
 
   context 'when adding an account in multiple groups' do
@@ -337,15 +337,15 @@ describe 'accounts' do
       }
     end
 
-    it { should compile.with_all_deps }
+    it { is_expected.to compile.with_all_deps }
 
-    it { should have_group_resource_count(1) }
-    it { should contain_group('foo').with({ :ensure => nil }) }
+    it { is_expected.to have_group_resource_count(1) }
+    it { is_expected.to contain_group('foo').with({ :ensure => nil }) }
 
-    it { should have_ssh_authorized_key_resource_count(0) }
+    it { is_expected.to have_ssh_authorized_key_resource_count(0) }
 
-    it { should have_user_resource_count(1) }
-    it { should contain_user('foo').with({ :groups => [ 'foo', 'bar', ] }) }
+    it { is_expected.to have_user_resource_count(1) }
+    it { is_expected.to contain_user('foo').with({ :groups => [ 'foo', 'bar', ] }) }
   end
 
   context 'when adding an account with only its ssh_key' do
@@ -369,15 +369,15 @@ describe 'accounts' do
       }
     end
 
-    it { should compile.with_all_deps }
+    it { is_expected.to compile.with_all_deps }
 
-    it { should have_group_resource_count(0) }
+    it { is_expected.to have_group_resource_count(0) }
 
-    it { should have_ssh_authorized_key_resource_count(1) }
-    it { should contain_ssh_authorized_key('foo-on-foo').with({ :user => 'foo' }) }
+    it { is_expected.to have_ssh_authorized_key_resource_count(1) }
+    it { is_expected.to contain_ssh_authorized_key('foo-on-foo').with({ :user => 'foo' }) }
 
-    it { should have_user_resource_count(1) }
-    it { should contain_user('foo') }
+    it { is_expected.to have_user_resource_count(1) }
+    it { is_expected.to contain_user('foo') }
   end
 
   context 'when adding an account with only its ssh_key and a specific ssh_authorized_key title' do
@@ -402,15 +402,15 @@ describe 'accounts' do
       }
     end
 
-    it { should compile.with_all_deps }
+    it { is_expected.to compile.with_all_deps }
 
-    it { should have_group_resource_count(0) }
+    it { is_expected.to have_group_resource_count(0) }
 
-    it { should have_ssh_authorized_key_resource_count(1) }
-    it { should contain_ssh_authorized_key('foo on foo').with({ :user => 'foo' }) }
+    it { is_expected.to have_ssh_authorized_key_resource_count(1) }
+    it { is_expected.to contain_ssh_authorized_key('foo on foo').with({ :user => 'foo' }) }
 
-    it { should have_user_resource_count(1) }
-    it { should contain_user('foo') }
+    it { is_expected.to have_user_resource_count(1) }
+    it { is_expected.to contain_user('foo') }
   end
 
   context 'when authorized_keys is a string' do
@@ -440,16 +440,16 @@ describe 'accounts' do
       }
     end
 
-    it { should compile.with_all_deps }
+    it { is_expected.to compile.with_all_deps }
 
-    it { should have_group_resource_count(0) }
+    it { is_expected.to have_group_resource_count(0) }
 
-    it { should have_ssh_authorized_key_resource_count(2) }
-    it { should contain_ssh_authorized_key('foo-on-foo').with({ :user => 'foo' }) }
-    it { should contain_ssh_authorized_key('bar-on-foo').with({ :user => 'foo' }) }
+    it { is_expected.to have_ssh_authorized_key_resource_count(2) }
+    it { is_expected.to contain_ssh_authorized_key('foo-on-foo').with({ :user => 'foo' }) }
+    it { is_expected.to contain_ssh_authorized_key('bar-on-foo').with({ :user => 'foo' }) }
 
-    it { should have_user_resource_count(1) }
-    it { should contain_user('foo') }
+    it { is_expected.to have_user_resource_count(1) }
+    it { is_expected.to contain_user('foo') }
   end
 
   context 'when authorized_keys is a string and a specific ssh_authorized_key title' do
@@ -480,16 +480,16 @@ describe 'accounts' do
       }
     end
 
-    it { should compile.with_all_deps }
+    it { is_expected.to compile.with_all_deps }
 
-    it { should have_group_resource_count(0) }
+    it { is_expected.to have_group_resource_count(0) }
 
-    it { should have_ssh_authorized_key_resource_count(2) }
-    it { should contain_ssh_authorized_key('foo on foo').with({ :user => 'foo' }) }
-    it { should contain_ssh_authorized_key('bar on foo').with({ :user => 'foo' }) }
+    it { is_expected.to have_ssh_authorized_key_resource_count(2) }
+    it { is_expected.to contain_ssh_authorized_key('foo on foo').with({ :user => 'foo' }) }
+    it { is_expected.to contain_ssh_authorized_key('bar on foo').with({ :user => 'foo' }) }
 
-    it { should have_user_resource_count(1) }
-    it { should contain_user('foo') }
+    it { is_expected.to have_user_resource_count(1) }
+    it { is_expected.to contain_user('foo') }
   end
 
   context 'when authorized_keys is an array' do
@@ -519,16 +519,16 @@ describe 'accounts' do
       }
     end
 
-    it { should compile.with_all_deps }
+    it { is_expected.to compile.with_all_deps }
 
-    it { should have_group_resource_count(0) }
+    it { is_expected.to have_group_resource_count(0) }
 
-    it { should have_ssh_authorized_key_resource_count(2) }
-    it { should contain_ssh_authorized_key('foo-on-foo').with({ :user => 'foo' }) }
-    it { should contain_ssh_authorized_key('bar-on-foo').with({ :user => 'foo' }) }
+    it { is_expected.to have_ssh_authorized_key_resource_count(2) }
+    it { is_expected.to contain_ssh_authorized_key('foo-on-foo').with({ :user => 'foo' }) }
+    it { is_expected.to contain_ssh_authorized_key('bar-on-foo').with({ :user => 'foo' }) }
 
-    it { should have_user_resource_count(1) }
-    it { should contain_user('foo') }
+    it { is_expected.to have_user_resource_count(1) }
+    it { is_expected.to contain_user('foo') }
   end
 
   context 'when authorized_keys is an array and a specific ssh_authorized_key title' do
@@ -559,16 +559,16 @@ describe 'accounts' do
       }
     end
 
-    it { should compile.with_all_deps }
+    it { is_expected.to compile.with_all_deps }
 
-    it { should have_group_resource_count(0) }
+    it { is_expected.to have_group_resource_count(0) }
 
-    it { should have_ssh_authorized_key_resource_count(2) }
-    it { should contain_ssh_authorized_key('foo on foo').with({ :user => 'foo' }) }
-    it { should contain_ssh_authorized_key('bar on foo').with({ :user => 'foo' }) }
+    it { is_expected.to have_ssh_authorized_key_resource_count(2) }
+    it { is_expected.to contain_ssh_authorized_key('foo on foo').with({ :user => 'foo' }) }
+    it { is_expected.to contain_ssh_authorized_key('bar on foo').with({ :user => 'foo' }) }
 
-    it { should have_user_resource_count(1) }
-    it { should contain_user('foo') }
+    it { is_expected.to have_user_resource_count(1) }
+    it { is_expected.to contain_user('foo') }
   end
 
   context 'when authorized_keys is a hash' do
@@ -602,19 +602,19 @@ describe 'accounts' do
       }
     end
 
-    it { should compile.with_all_deps }
+    it { is_expected.to compile.with_all_deps }
 
-    it { should have_group_resource_count(0) }
+    it { is_expected.to have_group_resource_count(0) }
 
-    it { should have_ssh_authorized_key_resource_count(2) }
-    it { should contain_ssh_authorized_key('foo-on-foo').with({ :user => 'foo' }) }
-    it { should contain_ssh_authorized_key('bar-on-foo').with({
+    it { is_expected.to have_ssh_authorized_key_resource_count(2) }
+    it { is_expected.to contain_ssh_authorized_key('foo-on-foo').with({ :user => 'foo' }) }
+    it { is_expected.to contain_ssh_authorized_key('bar-on-foo').with({
       :user    => 'foo',
       :options => ['no-pty', 'no-port-forwarding', 'no-X11-forwarding'],
     }) }
 
-    it { should have_user_resource_count(1) }
-    it { should contain_user('foo') }
+    it { is_expected.to have_user_resource_count(1) }
+    it { is_expected.to contain_user('foo') }
   end
 
   context 'when authorized_keys is a hash and a specific ssh_authorized_key title' do
@@ -649,19 +649,19 @@ describe 'accounts' do
       }
     end
 
-    it { should compile.with_all_deps }
+    it { is_expected.to compile.with_all_deps }
 
-    it { should have_group_resource_count(0) }
+    it { is_expected.to have_group_resource_count(0) }
 
-    it { should have_ssh_authorized_key_resource_count(2) }
-    it { should contain_ssh_authorized_key('foo on foo').with({ :user => 'foo' }) }
-    it { should contain_ssh_authorized_key('bar on foo').with({
+    it { is_expected.to have_ssh_authorized_key_resource_count(2) }
+    it { is_expected.to contain_ssh_authorized_key('foo on foo').with({ :user => 'foo' }) }
+    it { is_expected.to contain_ssh_authorized_key('bar on foo').with({
       :user    => 'foo',
       :options => ['no-pty', 'no-port-forwarding', 'no-X11-forwarding'],
     }) }
 
-    it { should have_user_resource_count(1) }
-    it { should contain_user('foo') }
+    it { is_expected.to have_user_resource_count(1) }
+    it { is_expected.to contain_user('foo') }
   end
 
   context 'when using an undefined user group' do
@@ -673,7 +673,7 @@ describe 'accounts' do
       }
     end
 
-    it { expect { should compile.with_all_deps}.to raise_error(/Can't find usergroup : foo/) }
+    it { expect { is_expected.to compile.with_all_deps}.to raise_error(/Can't find usergroup : foo/) }
 
   end
 
@@ -731,21 +731,21 @@ describe 'accounts' do
       }
     end
 
-    it { should compile.with_all_deps }
+    it { is_expected.to compile.with_all_deps }
 
-    it { should have_group_resource_count(0) }
+    it { is_expected.to have_group_resource_count(0) }
 
-    it { should have_ssh_authorized_key_resource_count(4) }
-    it { should contain_ssh_authorized_key('foo-on-foo').with({ :ensure => :present }) }
-    it { should contain_ssh_authorized_key('bar-on-bar').with({ :ensure => :present }) }
-    it { should contain_ssh_authorized_key('baz-on-baz').with({ :ensure => :present }) }
-    it { should contain_ssh_authorized_key('qux-on-qux').with({ :ensure => :present }) }
+    it { is_expected.to have_ssh_authorized_key_resource_count(4) }
+    it { is_expected.to contain_ssh_authorized_key('foo-on-foo').with({ :ensure => :present }) }
+    it { is_expected.to contain_ssh_authorized_key('bar-on-bar').with({ :ensure => :present }) }
+    it { is_expected.to contain_ssh_authorized_key('baz-on-baz').with({ :ensure => :present }) }
+    it { is_expected.to contain_ssh_authorized_key('qux-on-qux').with({ :ensure => :present }) }
 
-    it { should have_user_resource_count(4) }
-    it { should contain_user('foo').with({ :ensure => :present, :groups => 'foo', }) }
-    it { should contain_user('bar').with({ :ensure => :present, :groups => 'bar', }) }
-    it { should contain_user('baz').with({ :ensure => :present, :groups => 'foo', }) }
-    it { should contain_user('qux').with({ :ensure => :present, :groups => 'bar', }) }
+    it { is_expected.to have_user_resource_count(4) }
+    it { is_expected.to contain_user('foo').with({ :ensure => :present, :groups => 'foo', }) }
+    it { is_expected.to contain_user('bar').with({ :ensure => :present, :groups => 'bar', }) }
+    it { is_expected.to contain_user('baz').with({ :ensure => :present, :groups => 'foo', }) }
+    it { is_expected.to contain_user('qux').with({ :ensure => :present, :groups => 'bar', }) }
   end
 
   context 'when adding a user group and a specific ssh_authorized_key title' do
@@ -803,21 +803,21 @@ describe 'accounts' do
       }
     end
 
-    it { should compile.with_all_deps }
+    it { is_expected.to compile.with_all_deps }
 
-    it { should have_group_resource_count(0) }
+    it { is_expected.to have_group_resource_count(0) }
 
-    it { should have_ssh_authorized_key_resource_count(4) }
-    it { should contain_ssh_authorized_key('foo on foo').with({ :ensure => :present }) }
-    it { should contain_ssh_authorized_key('bar on bar').with({ :ensure => :present }) }
-    it { should contain_ssh_authorized_key('baz on baz').with({ :ensure => :present }) }
-    it { should contain_ssh_authorized_key('qux on qux').with({ :ensure => :present }) }
+    it { is_expected.to have_ssh_authorized_key_resource_count(4) }
+    it { is_expected.to contain_ssh_authorized_key('foo on foo').with({ :ensure => :present }) }
+    it { is_expected.to contain_ssh_authorized_key('bar on bar').with({ :ensure => :present }) }
+    it { is_expected.to contain_ssh_authorized_key('baz on baz').with({ :ensure => :present }) }
+    it { is_expected.to contain_ssh_authorized_key('qux on qux').with({ :ensure => :present }) }
 
-    it { should have_user_resource_count(4) }
-    it { should contain_user('foo').with({ :ensure => :present, :groups => 'foo', }) }
-    it { should contain_user('bar').with({ :ensure => :present, :groups => 'bar', }) }
-    it { should contain_user('baz').with({ :ensure => :present, :groups => 'foo', }) }
-    it { should contain_user('qux').with({ :ensure => :present, :groups => 'bar', }) }
+    it { is_expected.to have_user_resource_count(4) }
+    it { is_expected.to contain_user('foo').with({ :ensure => :present, :groups => 'foo', }) }
+    it { is_expected.to contain_user('bar').with({ :ensure => :present, :groups => 'bar', }) }
+    it { is_expected.to contain_user('baz').with({ :ensure => :present, :groups => 'foo', }) }
+    it { is_expected.to contain_user('qux').with({ :ensure => :present, :groups => 'bar', }) }
   end
 
   context 'when adding a user group with ambiguous groups' do
@@ -876,51 +876,51 @@ describe 'accounts' do
 
     it {
       pending
-      should compile.with_all_deps
+      is_expected.to compile.with_all_deps
     }
     it {
       pending
-      should have_group_resource_count(0)
+      is_expected.to have_group_resource_count(0)
     }
     it {
       pending
-      should have_ssh_authorized_key_resource_count(4)
+      is_expected.to have_ssh_authorized_key_resource_count(4)
     }
     it {
       pending
-      should contain_ssh_authorized_key('foo-on-foo').with({ :ensure => :present })
+      is_expected.to contain_ssh_authorized_key('foo-on-foo').with({ :ensure => :present })
     }
     it {
       pending
-      should contain_ssh_authorized_key('bar-on-bar').with({ :ensure => :present })
+      is_expected.to contain_ssh_authorized_key('bar-on-bar').with({ :ensure => :present })
     }
     it {
       pending
-      should contain_ssh_authorized_key('baz-on-baz').with({ :ensure => :present })
+      is_expected.to contain_ssh_authorized_key('baz-on-baz').with({ :ensure => :present })
     }
     it {
       pending
-      should contain_ssh_authorized_key('qux-on-qux').with({ :ensure => :present })
+      is_expected.to contain_ssh_authorized_key('qux-on-qux').with({ :ensure => :present })
     }
     it {
       pending
-      should have_user_resource_count(4)
+      is_expected.to have_user_resource_count(4)
     }
     it {
       pending
-      should contain_user('foo').with({ :ensure => nil, :groups => 'foo', })
+      is_expected.to contain_user('foo').with({ :ensure => nil, :groups => 'foo', })
     }
     it {
       pending
-      should contain_user('bar').with({ :ensure => nil, :groups => 'bar', })
+      is_expected.to contain_user('bar').with({ :ensure => nil, :groups => 'bar', })
     }
     it {
       pending
-      should contain_user('baz').with({ :ensure => nil, :groups => 'foo', })
+      is_expected.to contain_user('baz').with({ :ensure => nil, :groups => 'foo', })
     }
     it {
       pending
-      should contain_user('qux').with({ :ensure => nil, :groups => 'bar', })
+      is_expected.to contain_user('qux').with({ :ensure => nil, :groups => 'bar', })
     }
   end
 
@@ -982,23 +982,23 @@ describe 'accounts' do
       }
     end
 
-    it { should compile.with_all_deps }
+    it { is_expected.to compile.with_all_deps }
 
-    it { should have_group_resource_count(0) }
+    it { is_expected.to have_group_resource_count(0) }
 
-    it { should have_ssh_authorized_key_resource_count(4) }
-    it { should contain_ssh_authorized_key('foo-on-quux').with({ :ensure => :present }) }
-    it { should contain_ssh_authorized_key('bar-on-corge').with({
+    it { is_expected.to have_ssh_authorized_key_resource_count(4) }
+    it { is_expected.to contain_ssh_authorized_key('foo-on-quux').with({ :ensure => :present }) }
+    it { is_expected.to contain_ssh_authorized_key('bar-on-corge').with({
       :ensure  => :present,
       :options => ['no-pty', 'no-port-forwarding', 'no-X11-forwarding'],
     }) }
-    it { should contain_ssh_authorized_key('baz-on-quux').with({ :ensure => :present }) }
-    it { should contain_ssh_authorized_key('qux-on-corge').with({
+    it { is_expected.to contain_ssh_authorized_key('baz-on-quux').with({ :ensure => :present }) }
+    it { is_expected.to contain_ssh_authorized_key('qux-on-corge').with({
       :ensure  => :present,
       :options => ['no-pty', 'no-port-forwarding', 'no-X11-forwarding'],
     }) }
 
-    it { should have_user_resource_count(0) }
+    it { is_expected.to have_user_resource_count(0) }
   end
 
   context 'when adding a public keys of a user group and a specific ssh_authorized_key title' do
@@ -1060,23 +1060,23 @@ describe 'accounts' do
       }
     end
 
-    it { should compile.with_all_deps }
+    it { is_expected.to compile.with_all_deps }
 
-    it { should have_group_resource_count(0) }
+    it { is_expected.to have_group_resource_count(0) }
 
-    it { should have_ssh_authorized_key_resource_count(4) }
-    it { should contain_ssh_authorized_key('foo on quux').with({ :ensure => :present }) }
-    it { should contain_ssh_authorized_key('bar on corge').with({
+    it { is_expected.to have_ssh_authorized_key_resource_count(4) }
+    it { is_expected.to contain_ssh_authorized_key('foo on quux').with({ :ensure => :present }) }
+    it { is_expected.to contain_ssh_authorized_key('bar on corge').with({
       :ensure  => :present,
       :options => ['no-pty', 'no-port-forwarding', 'no-X11-forwarding'],
     }) }
-    it { should contain_ssh_authorized_key('baz on quux').with({ :ensure => :present }) }
-    it { should contain_ssh_authorized_key('qux on corge').with({
+    it { is_expected.to contain_ssh_authorized_key('baz on quux').with({ :ensure => :present }) }
+    it { is_expected.to contain_ssh_authorized_key('qux on corge').with({
       :ensure  => :present,
       :options => ['no-pty', 'no-port-forwarding', 'no-X11-forwarding'],
     }) }
 
-    it { should have_user_resource_count(0) }
+    it { is_expected.to have_user_resource_count(0) }
   end
 
   context 'when removing an account' do
@@ -1106,14 +1106,14 @@ describe 'accounts' do
       }
     end
 
-    it { should compile.with_all_deps }
+    it { is_expected.to compile.with_all_deps }
 
-    it { should have_group_resource_count(0) }
+    it { is_expected.to have_group_resource_count(0) }
 
-    it { should have_ssh_authorized_key_resource_count(0) }
+    it { is_expected.to have_ssh_authorized_key_resource_count(0) }
 
-    it { should have_user_resource_count(1) }
-    it { should contain_user('foo').with({ :ensure => :absent }) }
+    it { is_expected.to have_user_resource_count(1) }
+    it { is_expected.to contain_user('foo').with({ :ensure => :absent }) }
   end
 
   context 'when removing an user' do
@@ -1139,14 +1139,14 @@ describe 'accounts' do
       }
     end
 
-    it { should compile.with_all_deps }
+    it { is_expected.to compile.with_all_deps }
 
-    it { should have_group_resource_count(0) }
+    it { is_expected.to have_group_resource_count(0) }
 
-    it { should have_ssh_authorized_key_resource_count(0) }
+    it { is_expected.to have_ssh_authorized_key_resource_count(0) }
 
-    it { should have_user_resource_count(1) }
-    it { should contain_user('foo').with({ :ensure => :absent }) }
+    it { is_expected.to have_user_resource_count(1) }
+    it { is_expected.to contain_user('foo').with({ :ensure => :absent }) }
   end
 
   context 'when removing a public key' do
@@ -1175,16 +1175,16 @@ describe 'accounts' do
       }
     end
 
-    it { should compile.with_all_deps }
+    it { is_expected.to compile.with_all_deps }
 
-    it { should have_group_resource_count(0) }
+    it { is_expected.to have_group_resource_count(0) }
 
-    it { should have_ssh_authorized_key_resource_count(2) }
-    it { should contain_ssh_authorized_key('foo-on-foo').with({ :ensure => :present }) }
-    it { should contain_ssh_authorized_key('bar-on-foo').with({ :ensure => :absent }) }
+    it { is_expected.to have_ssh_authorized_key_resource_count(2) }
+    it { is_expected.to contain_ssh_authorized_key('foo-on-foo').with({ :ensure => :present }) }
+    it { is_expected.to contain_ssh_authorized_key('bar-on-foo').with({ :ensure => :absent }) }
 
-    it { should have_user_resource_count(1) }
-    it { should contain_user('foo') }
+    it { is_expected.to have_user_resource_count(1) }
+    it { is_expected.to contain_user('foo') }
   end
 
   context 'when removing a public key and a specific ssh_authorized_key title' do
@@ -1214,16 +1214,16 @@ describe 'accounts' do
       }
     end
 
-    it { should compile.with_all_deps }
+    it { is_expected.to compile.with_all_deps }
 
-    it { should have_group_resource_count(0) }
+    it { is_expected.to have_group_resource_count(0) }
 
-    it { should have_ssh_authorized_key_resource_count(2) }
-    it { should contain_ssh_authorized_key('foo on foo').with({ :ensure => :present }) }
-    it { should contain_ssh_authorized_key('bar on foo').with({ :ensure => :absent }) }
+    it { is_expected.to have_ssh_authorized_key_resource_count(2) }
+    it { is_expected.to contain_ssh_authorized_key('foo on foo').with({ :ensure => :present }) }
+    it { is_expected.to contain_ssh_authorized_key('bar on foo').with({ :ensure => :absent }) }
 
-    it { should have_user_resource_count(1) }
-    it { should contain_user('foo') }
+    it { is_expected.to have_user_resource_count(1) }
+    it { is_expected.to contain_user('foo') }
   end
 
   context 'when complex scenario' do
@@ -1288,23 +1288,23 @@ describe 'accounts' do
       }
     end
 
-    it { should compile.with_all_deps }
+    it { is_expected.to compile.with_all_deps }
 
-    it { should have_group_resource_count(0) }
+    it { is_expected.to have_group_resource_count(0) }
 
-    it { should have_ssh_authorized_key_resource_count(7) }
-    it { should contain_ssh_authorized_key('foo-on-foo').with({ :ensure => :present }) }
-    it { should contain_ssh_authorized_key('bar-on-foo').with({ :ensure => :absent }) }
-    it { should contain_ssh_authorized_key('qux-on-foo').with({ :ensure => :present }) }
-    it { should contain_ssh_authorized_key('quux-on-foo').with({ :ensure => :present }) }
-    it { should contain_ssh_authorized_key('corge-on-foo').with({ :ensure => :present }) }
-    it { should contain_ssh_authorized_key('bar-on-baz').with({ :ensure => :absent }) }
-    it { should contain_ssh_authorized_key('bar-on-qux').with({ :ensure => :absent }) }
+    it { is_expected.to have_ssh_authorized_key_resource_count(7) }
+    it { is_expected.to contain_ssh_authorized_key('foo-on-foo').with({ :ensure => :present }) }
+    it { is_expected.to contain_ssh_authorized_key('bar-on-foo').with({ :ensure => :absent }) }
+    it { is_expected.to contain_ssh_authorized_key('qux-on-foo').with({ :ensure => :present }) }
+    it { is_expected.to contain_ssh_authorized_key('quux-on-foo').with({ :ensure => :present }) }
+    it { is_expected.to contain_ssh_authorized_key('corge-on-foo').with({ :ensure => :present }) }
+    it { is_expected.to contain_ssh_authorized_key('bar-on-baz').with({ :ensure => :absent }) }
+    it { is_expected.to contain_ssh_authorized_key('bar-on-qux').with({ :ensure => :absent }) }
 
-    it { should have_user_resource_count(4) }
-    it { should contain_user('foo').with({ :ensure => :present }) }
-    it { should contain_user('baz').with({ :ensure => :present }) }
-    it { should contain_user('qux').with({ :ensure => :absent }) }
+    it { is_expected.to have_user_resource_count(4) }
+    it { is_expected.to contain_user('foo').with({ :ensure => :present }) }
+    it { is_expected.to contain_user('baz').with({ :ensure => :present }) }
+    it { is_expected.to contain_user('qux').with({ :ensure => :absent }) }
   end
 
   context 'when complex scenario and a specific ssh_authorized_key title' do
@@ -1370,23 +1370,23 @@ describe 'accounts' do
       }
     end
 
-    it { should compile.with_all_deps }
+    it { is_expected.to compile.with_all_deps }
 
-    it { should have_group_resource_count(0) }
+    it { is_expected.to have_group_resource_count(0) }
 
-    it { should have_ssh_authorized_key_resource_count(7) }
-    it { should contain_ssh_authorized_key('foo on foo').with({ :ensure => :present }) }
-    it { should contain_ssh_authorized_key('bar on foo').with({ :ensure => :absent }) }
-    it { should contain_ssh_authorized_key('qux on foo').with({ :ensure => :present }) }
-    it { should contain_ssh_authorized_key('quux on foo').with({ :ensure => :present }) }
-    it { should contain_ssh_authorized_key('corge on foo').with({ :ensure => :present }) }
-    it { should contain_ssh_authorized_key('bar on baz').with({ :ensure => :absent }) }
-    it { should contain_ssh_authorized_key('bar on qux').with({ :ensure => :absent }) }
+    it { is_expected.to have_ssh_authorized_key_resource_count(7) }
+    it { is_expected.to contain_ssh_authorized_key('foo on foo').with({ :ensure => :present }) }
+    it { is_expected.to contain_ssh_authorized_key('bar on foo').with({ :ensure => :absent }) }
+    it { is_expected.to contain_ssh_authorized_key('qux on foo').with({ :ensure => :present }) }
+    it { is_expected.to contain_ssh_authorized_key('quux on foo').with({ :ensure => :present }) }
+    it { is_expected.to contain_ssh_authorized_key('corge on foo').with({ :ensure => :present }) }
+    it { is_expected.to contain_ssh_authorized_key('bar on baz').with({ :ensure => :absent }) }
+    it { is_expected.to contain_ssh_authorized_key('bar on qux').with({ :ensure => :absent }) }
 
-    it { should have_user_resource_count(4) }
-    it { should contain_user('foo').with({ :ensure => :present }) }
-    it { should contain_user('baz').with({ :ensure => :present }) }
-    it { should contain_user('qux').with({ :ensure => :absent }) }
+    it { is_expected.to have_user_resource_count(4) }
+    it { is_expected.to contain_user('foo').with({ :ensure => :present }) }
+    it { is_expected.to contain_user('baz').with({ :ensure => :present }) }
+    it { is_expected.to contain_user('qux').with({ :ensure => :absent }) }
   end
 
 end
