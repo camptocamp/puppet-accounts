@@ -673,7 +673,7 @@ describe 'accounts' do
       }
     end
 
-    it { expect { should compile.with_all_deps}.to raise_error(Puppet::Error, /Can't find usergroup : foo/) }
+    it { expect { should compile.with_all_deps}.to raise_error(/Can't find usergroup : foo/) }
 
   end
 
