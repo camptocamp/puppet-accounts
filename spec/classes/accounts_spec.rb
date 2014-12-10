@@ -213,7 +213,7 @@ describe 'accounts' do
     it { is_expected.to have_user_resource_count(1) }
     it { is_expected.to contain_user('foo') }
 
-    it { is_expected.to contain_exec("/bin/echo 'FOO-S-RSA-PRIVATE-KEY' > ~foo/.ssh/id_rsa").with({
+    it { is_expected.to contain_exec("put ssh private key foo for user foo").with({
       :unless => '/usr/bin/test -f ~foo/.ssh/id_rsa',
     })}
   end
@@ -254,7 +254,7 @@ describe 'accounts' do
     it { is_expected.to have_user_resource_count(1) }
     it { is_expected.to contain_user('foo') }
 
-    it { is_expected.to contain_exec("/bin/echo 'FOO-S-RSA-PRIVATE-KEY' > ~foo/.ssh/id_rsa").with({
+    it { is_expected.to contain_exec("put ssh private key foo for user foo").with({
       :unless => '/usr/bin/test -f ~foo/.ssh/id_rsa',
     })}
   end
