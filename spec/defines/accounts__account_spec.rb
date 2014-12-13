@@ -14,7 +14,7 @@ describe 'accounts::account' do
 class { 'accounts':
   ssh_keys => {
     foo => {
-      type    => 'ssh-rsa',
+      'type'  => 'ssh-rsa',
       public  => 'FOO-S-RSA-PUBLIC-KEY',
       comment => 'foo@example.com',
     },
@@ -35,10 +35,10 @@ class { 'accounts':
     it { is_expected.to contain_ssh_authorized_key('foo-on-foo').with({ :ensure => :present }) }
   end
 
-  context 'when ssh_authorized_key_title => \'%{ssh_key} on %{user}\'' do
+  context 'when ssh_authorized_key_title => \'%{ssh_key} on %{account}\'' do
     let(:params) do
       {
-        :ssh_authorized_key_title => '%{ssh_key} on %{user}',
+        :ssh_authorized_key_title => '%{ssh_key} on %{account}',
       }
     end
     it { is_expected.to compile.with_all_deps }
@@ -46,10 +46,10 @@ class { 'accounts':
     it { is_expected.to contain_ssh_authorized_key('foo on foo').with({ :ensure => :present }) }
   end
 
-  context 'when ssh_authorized_key_title => "%{ssh_keys[\'%{ssh_key}\'][\'comment\']} on %{user}"' do
+  context 'when ssh_authorized_key_title => "%{ssh_keys[\'%{ssh_key}\'][\'comment\']} on %{account}"' do
     let(:params) do
       {
-        :ssh_authorized_key_title => "%{ssh_keys['%{ssh_key}']['comment']} on %{user}",
+        :ssh_authorized_key_title => "%{ssh_keys['%{ssh_key}']['comment']} on %{account}",
       }
     end
     it { is_expected.to compile.with_all_deps }

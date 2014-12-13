@@ -161,7 +161,7 @@ describe 'accounts' do
         :accounts    => {
           'foo' => { },
         },
-	:ssh_authorized_key_title => '%{ssh_keys[\'%{ssh_key}\'][\'comment\']} on %{user}',
+	:ssh_authorized_key_title => '%{ssh_keys[\'%{ssh_key}\'][\'comment\']} on %{account}',
       }
     end
 
@@ -237,7 +237,7 @@ describe 'accounts' do
         :accounts    => {
           'foo' => { },
         },
-	:ssh_authorized_key_title => '%{ssh_key} on %{user}',
+	:ssh_authorized_key_title => '%{ssh_key} on %{account}',
       }
     end
 
@@ -398,7 +398,7 @@ describe 'accounts' do
         :accounts    => {
           'foo' => { },
         },
-        :ssh_authorized_key_title => '%{ssh_key} on %{user}',
+        :ssh_authorized_key_title => '%{ssh_key} on %{account}',
       }
     end
 
@@ -476,7 +476,7 @@ describe 'accounts' do
             'authorized_keys' => 'bar',
 	  },
         },
-        :ssh_authorized_key_title => '%{ssh_key} on %{user}',
+        :ssh_authorized_key_title => '%{ssh_key} on %{account}',
       }
     end
 
@@ -555,7 +555,7 @@ describe 'accounts' do
             'authorized_keys' => [ 'bar' ],
 	  },
         },
-        :ssh_authorized_key_title => '%{ssh_key} on %{user}',
+        :ssh_authorized_key_title => '%{ssh_key} on %{account}',
       }
     end
 
@@ -645,7 +645,7 @@ describe 'accounts' do
             },
 	  },
         },
-        :ssh_authorized_key_title => '%{ssh_key} on %{user}',
+        :ssh_authorized_key_title => '%{ssh_key} on %{account}',
       }
     end
 
@@ -742,10 +742,10 @@ describe 'accounts' do
     it { is_expected.to contain_ssh_authorized_key('qux-on-qux').with({ :ensure => :present }) }
 
     it { is_expected.to have_user_resource_count(4) }
-    it { is_expected.to contain_user('foo').with({ :ensure => :present, :groups => 'foo', }) }
-    it { is_expected.to contain_user('bar').with({ :ensure => :present, :groups => 'bar', }) }
-    it { is_expected.to contain_user('baz').with({ :ensure => :present, :groups => 'foo', }) }
-    it { is_expected.to contain_user('qux').with({ :ensure => :present, :groups => 'bar', }) }
+    it { is_expected.to contain_user('foo').with({ :ensure => :present, :groups => ['foo'], }) }
+    it { is_expected.to contain_user('bar').with({ :ensure => :present, :groups => ['bar'], }) }
+    it { is_expected.to contain_user('baz').with({ :ensure => :present, :groups => ['foo'], }) }
+    it { is_expected.to contain_user('qux').with({ :ensure => :present, :groups => ['bar'], }) }
   end
 
   context 'when adding a user group and a specific ssh_authorized_key title' do
@@ -799,7 +799,7 @@ describe 'accounts' do
             'groups' => [ 'bar', ],
           },
         },
-        :ssh_authorized_key_title => '%{ssh_key} on %{user}',
+        :ssh_authorized_key_title => '%{ssh_key} on %{account}',
       }
     end
 
@@ -814,10 +814,10 @@ describe 'accounts' do
     it { is_expected.to contain_ssh_authorized_key('qux on qux').with({ :ensure => :present }) }
 
     it { is_expected.to have_user_resource_count(4) }
-    it { is_expected.to contain_user('foo').with({ :ensure => :present, :groups => 'foo', }) }
-    it { is_expected.to contain_user('bar').with({ :ensure => :present, :groups => 'bar', }) }
-    it { is_expected.to contain_user('baz').with({ :ensure => :present, :groups => 'foo', }) }
-    it { is_expected.to contain_user('qux').with({ :ensure => :present, :groups => 'bar', }) }
+    it { is_expected.to contain_user('foo').with({ :ensure => :present, :groups => ['foo'], }) }
+    it { is_expected.to contain_user('bar').with({ :ensure => :present, :groups => ['bar'], }) }
+    it { is_expected.to contain_user('baz').with({ :ensure => :present, :groups => ['foo'], }) }
+    it { is_expected.to contain_user('qux').with({ :ensure => :present, :groups => ['bar'], }) }
   end
 
   context 'when adding a user group with ambiguous groups' do
@@ -1056,7 +1056,7 @@ describe 'accounts' do
             },
           },
         },
-        :ssh_authorized_key_title => '%{ssh_key} on %{user}',
+        :ssh_authorized_key_title => '%{ssh_key} on %{account}',
       }
     end
 
@@ -1210,7 +1210,7 @@ describe 'accounts' do
         :accounts    => {
           'foo' => { },
         },
-        :ssh_authorized_key_title => '%{ssh_key} on %{user}',
+        :ssh_authorized_key_title => '%{ssh_key} on %{account}',
       }
     end
 
@@ -1366,7 +1366,7 @@ describe 'accounts' do
             'ensure' => 'absent',
           },
         },
-        :ssh_authorized_key_title => '%{ssh_key} on %{user}',
+        :ssh_authorized_key_title => '%{ssh_key} on %{account}',
       }
     end
 
