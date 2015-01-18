@@ -32,19 +32,29 @@ define accounts::account(
       } else {
         $_purge_ssh_keys = false
       }
+      $hash = merge(
+        {
+          ensure         => $ensure,
+          groups         => $groups,
+          home           => "/home/${$name}",
+          managehome     => true,
+        },
+        $::accounts::users[$name]
+      )
+      if versioncmp($::puppetversion, '3.6.0') > 0 {
+        $_hash = merge(
+          $hash,
+          {
+            purge_ssh_keys => $_purge_ssh_keys,
+          }
+        )
+      } else {
+        $_hash = $hash
+      }
       ensure_resource(
         user,
         $name,
-        merge(
-          {
-            ensure         => $ensure,
-            groups         => $groups,
-            home           => "/home/${$name}",
-            managehome     => true,
-            purge_ssh_keys => $_purge_ssh_keys,
-          },
-          $::accounts::users[$name]
-        )
+        $_hash
       )
     }
 
