@@ -1363,6 +1363,7 @@ describe 'accounts' do
             :accounts    => {
               'foo' => { # An account with multiple public keys
                 'authorized_keys' => [ 'qux', 'quux', 'corge', ],
+                'purge_ssh_keys'  => true,
               },
               'baz' => { # An account without public key
               },
@@ -1388,8 +1389,18 @@ describe 'accounts' do
         it { is_expected.to contain_ssh_authorized_key('bar on qux').with({ :ensure => :absent }) }
 
         it { is_expected.to have_user_resource_count(4) }
-        it { is_expected.to contain_user('foo').with({ :ensure => :present }) }
-        it { is_expected.to contain_user('baz').with({ :ensure => :present }) }
+        it { is_expected.to contain_user('foo').with(
+          {
+            :ensure         => :present,
+            :purge_ssh_keys => true,
+          }
+        ) }
+        it { is_expected.to contain_user('baz').with(
+          {
+            :ensure         => :present,
+            :purge_ssh_keys => false,
+          }
+        ) }
         it { is_expected.to contain_user('qux').with({ :ensure => :absent }) }
       end
 

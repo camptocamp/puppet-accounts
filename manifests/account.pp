@@ -30,7 +30,7 @@ define accounts::account(
       if $purge_ssh_keys and $authorized_keys_target {
         $_purge_ssh_keys = strformat($authorized_keys_target)
       } else {
-        $_purge_ssh_keys = false
+        $_purge_ssh_keys = $purge_ssh_keys
       }
       $hash = merge(
         {
