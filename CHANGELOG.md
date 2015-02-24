@@ -1,3 +1,10 @@
+## 2015-02-24 - Release 1.1.8
+
+- purge_ssh_keys was alwaus set to false...
+- don't use purge_ssh_keys when puppet version < 3.6
+- Update unit tests
+- Update meta files
+
 ## 2015-01-05 - Release 1.1.7
 
 - Use CHANGELOG.md
