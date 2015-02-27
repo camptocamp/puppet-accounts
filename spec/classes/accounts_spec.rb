@@ -1389,18 +1389,31 @@ describe 'accounts' do
         it { is_expected.to contain_ssh_authorized_key('bar on qux').with({ :ensure => :absent }) }
 
         it { is_expected.to have_user_resource_count(4) }
-        it { is_expected.to contain_user('foo').with(
-          {
-            :ensure         => :present,
-            :purge_ssh_keys => true,
-          }
-        ) }
-        it { is_expected.to contain_user('baz').with(
-          {
-            :ensure         => :present,
-            :purge_ssh_keys => false,
-          }
-        ) }
+        if Gem::Version.new(Puppet::PUPPETVERSION) >= Gem::Version.new('3.6')
+          it { is_expected.to contain_user('foo').with(
+            {
+              :ensure         => :present,
+              :purge_ssh_keys => true,
+            }
+          ) }
+          it { is_expected.to contain_user('baz').with(
+            {
+              :ensure         => :present,
+              :purge_ssh_keys => false,
+            }
+          ) }
+        else
+          it { is_expected.to contain_user('foo').with(
+            {
+              :ensure         => :present,
+            }
+          ) }
+          it { is_expected.to contain_user('baz').with(
+            {
+              :ensure         => :present,
+            }
+          ) }
+        end
         it { is_expected.to contain_user('qux').with({ :ensure => :absent }) }
       end
 
