@@ -1,3 +1,7 @@
+## 2015-03-24 - Release 1.1.9
+
+- Various spec improvements
+
 ## 2015-02-24 - Release 1.1.8
 
 - purge_ssh_keys was alwaus set to false...
