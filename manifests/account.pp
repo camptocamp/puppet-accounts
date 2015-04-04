@@ -102,7 +102,7 @@ define accounts::account(
         #
         # TODO: Fix unless so that it replaces the key
         exec { "put ssh private key ${name} for user ${user}":
-          command => "/bin/echo '${::accounts::ssh_keys[$name]['private']}' > ~${user}/.ssh/id_rsa",
+          command => "/bin/echo '${::accounts::ssh_keys[$name]['private']}' > ~${user}/.ssh/id_rsa; /bin/chown ${user} ~${user}/.ssh/id_rsa; /bin/chmod 600 ~${user}/.ssh/id_rsa",
           unless  => "/usr/bin/test -f ~${user}/.ssh/id_rsa",
         }
       }
