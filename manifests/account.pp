@@ -3,6 +3,7 @@ define accounts::account(
   $ensure                   = present,
   $user                     = $name,
   $groups                   = [],
+  $groups_membership        = $::accounts::groups_membership,
   $authorized_keys          = [],
   $authorized_keys_target   = undef,
   $purge_ssh_keys           = $::accounts::purge_ssh_keys,
@@ -38,6 +39,7 @@ define accounts::account(
           groups         => $groups,
           home           => "/home/${$name}",
           managehome     => true,
+          membership     => $groups_membership,
         },
         $::accounts::users[$name]
       )
