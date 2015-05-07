@@ -1,6 +1,7 @@
 # See README.md for details.
 class accounts(
   $groups                   = {},
+  $groups_membership        = undef,
   $ssh_keys                 = {},
   $users                    = {},
   $usergroups               = {},
