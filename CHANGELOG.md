@@ -1,6 +1,10 @@
+## 2015-05-07 - Release 1.2.0
+
+- Add support for changing users default membership
+
 ## 2015-04-27 - Release 1.1.11
 
-Add nodeset ubuntu-12.04-x86_64-openstack
+- Add nodeset ubuntu-12.04-x86_64-openstack
 
 ## 2015-04-03 - Release 1.1.10
 
