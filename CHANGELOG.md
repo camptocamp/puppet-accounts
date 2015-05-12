@@ -1,3 +1,7 @@
+## 2015-05-12 - Release 1.2.1
+
+Don't pin beaker
+
 ## 2015-05-07 - Release 1.2.0
 
 - Add support for changing users default membership
