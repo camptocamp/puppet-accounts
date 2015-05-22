@@ -43,7 +43,7 @@ define accounts::account(
         },
         $::accounts::users[$name]
       )
-      if versioncmp($::puppetversion, '3.6.0') > 0 {
+      if versioncmp($::puppetversion, '3.6.0') >= 0 {
         $_hash = merge(
           $hash,
           {
