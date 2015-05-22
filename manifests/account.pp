@@ -1,6 +1,7 @@
 # See README.md for details.
 define accounts::account(
   $ensure                   = present,
+  $comment                  = undef,
   $user                     = $name,
   $groups                   = [],
   $groups_membership        = $::accounts::groups_membership,
@@ -19,6 +20,7 @@ define accounts::account(
       $::accounts::usergroups[$1],
       {
         ensure                   => $ensure,
+        comment                  => $comment,
         groups                   => $groups,
         authorized_keys          => $authorized_keys,
         authorized_keys_target   => $authorized_keys_target,
@@ -35,11 +37,12 @@ define accounts::account(
       }
       $hash = merge(
         {
-          ensure         => $ensure,
-          groups         => $groups,
-          home           => "/home/${$user}",
-          managehome     => true,
-          membership     => $groups_membership,
+          ensure     => $ensure,
+          comment    => $comment,
+          groups     => $groups,
+          home       => "/home/${$user}",
+          managehome => true,
+          membership => $groups_membership,
         },
         $::accounts::users[$name]
       )
