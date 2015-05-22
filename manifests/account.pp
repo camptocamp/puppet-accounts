@@ -37,7 +37,7 @@ define accounts::account(
         {
           ensure         => $ensure,
           groups         => $groups,
-          home           => "/home/${$name}",
+          home           => "/home/${$user}",
           managehome     => true,
           membership     => $groups_membership,
         },
@@ -55,7 +55,7 @@ define accounts::account(
       }
       ensure_resource(
         user,
-        $name,
+        $user,
         $_hash
       )
     }
