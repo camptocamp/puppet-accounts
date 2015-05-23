@@ -139,7 +139,6 @@ class { 'accounts':
           :groups         => [],
           :home           => '/home/matt',
           :managehome     => true,
-          :purge_ssh_keys => false,
           :uid            => 1009,
         })}
         it { is_expected.to have_ssh_authorized_key_resource_count(1) }
@@ -265,7 +264,6 @@ class { 'accounts':
           :groups         => [],
           :home           => '/home/luke',
           :managehome     => true,
-          :purge_ssh_keys => false,
           :uid            => 1000,
         })}
         it { is_expected.to contain_user('nigel').with({
@@ -275,7 +273,6 @@ class { 'accounts':
           :groups         => [],
           :home           => '/home/nigel',
           :managehome     => true,
-          :purge_ssh_keys => false,
           :uid            => 1001,
         })}
         it { is_expected.to contain_user('bill').with({
@@ -285,7 +282,6 @@ class { 'accounts':
           :groups         => [],
           :home           => '/home/bill',
           :managehome     => true,
-          :purge_ssh_keys => false,
           :uid            => 1002,
         })}
         it { is_expected.to have_ssh_authorized_key_resource_count(6) }
