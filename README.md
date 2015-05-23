@@ -25,11 +25,9 @@ Example hiera YAML file:
 ---
 accounts::ssh_keys:
   foo:
-    comment: foo@example.com
     type: ssh-rsa
     public: FOO-S-RSA-PUBLIC-KEY
   bar:
-    comment: bar@example.com
     type: ssh-rsa
     public: BAR-S-RSA-PUBLIC-KEY
 
