@@ -23,7 +23,7 @@ describe 'accounts' do
             },
             'ankou' => {
               'ensure'  => 'absent',
-              'comment' => 'An Ankoù',
+              'comment' => 'An Ankou',
               'uid'     => 9999,
             },
           },

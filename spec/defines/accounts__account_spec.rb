@@ -60,7 +60,7 @@ class { 'accounts':
     'ankou'   => {
       'ensure' => 'absent',
       'type'   => 'ssh-rsa',
-      'public'    => "An_Ankoù's_Key",
+      'public'    => "An_Ankou's_Key",
     }
   },
   users      => {
@@ -122,7 +122,7 @@ class { 'accounts':
         it { is_expected.to have_ssh_authorized_key_resource_count(1) }
         it { is_expected.to contain_ssh_authorized_key('ankou-on-foo').with({
           :ensure => 'absent',
-          :key    => "An_Ankoù's_Key",
+          :key    => "An_Ankou's_Key",
           :type   => 'ssh-rsa',
           :user   => 'foo',
         })}
@@ -145,7 +145,7 @@ class { 'accounts':
         it { is_expected.to have_ssh_authorized_key_resource_count(1) }
         it { is_expected.to contain_ssh_authorized_key('ankou-on-matt').with({
           :ensure => 'absent',
-          :key    => "An_Ankoù's_Key",
+          :key    => "An_Ankou's_Key",
           :type   => 'ssh-rsa',
           :user   => 'matt',
         })}
@@ -158,7 +158,7 @@ class { 'accounts':
         it { is_expected.to have_ssh_authorized_key_resource_count(2) }
         it { is_expected.to contain_ssh_authorized_key('ankou-on-beth').with({
           :ensure => 'absent',
-          :key    => "An_Ankoù's_Key",
+          :key    => "An_Ankou's_Key",
           :type   => 'ssh-rsa',
           :user   => 'beth',
         })}
@@ -186,7 +186,7 @@ class { 'accounts':
         it { is_expected.to have_ssh_authorized_key_resource_count(2) }
         it { is_expected.to contain_ssh_authorized_key('ankou-on-luke').with({
           :ensure => 'absent',
-          :key    => "An_Ankoù's_Key",
+          :key    => "An_Ankou's_Key",
           :type   => 'ssh-rsa',
           :user   => 'luke',
         })}
@@ -208,7 +208,7 @@ class { 'accounts':
         it { is_expected.to have_ssh_authorized_key_resource_count(2) }
         it { is_expected.to contain_ssh_authorized_key('ankou-on-root').with({
           :ensure => 'absent',
-          :key    => "An_Ankoù's_Key",
+          :key    => "An_Ankou's_Key",
           :type   => 'ssh-rsa',
           :user   => 'root',
         })}
@@ -230,7 +230,7 @@ class { 'accounts':
         it { is_expected.to have_ssh_authorized_key_resource_count(4) }
         it { is_expected.to contain_ssh_authorized_key('ankou-on-root').with({
           :ensure => 'absent',
-          :key    => "An_Ankoù's_Key",
+          :key    => "An_Ankou's_Key",
           :type   => 'ssh-rsa',
           :user   => 'root',
         })}
@@ -291,7 +291,7 @@ class { 'accounts':
         it { is_expected.to have_ssh_authorized_key_resource_count(6) }
         it { is_expected.to contain_ssh_authorized_key('ankou-on-luke').with({
           :ensure => 'absent',
-          :key    => "An_Ankoù's_Key",
+          :key    => "An_Ankou's_Key",
           :type   => 'ssh-rsa',
           :user   => 'luke',
         })}
@@ -303,7 +303,7 @@ class { 'accounts':
         })}
         it { is_expected.to contain_ssh_authorized_key('ankou-on-nigel').with({
           :ensure => 'absent',
-          :key    => "An_Ankoù's_Key",
+          :key    => "An_Ankou's_Key",
           :type   => 'ssh-rsa',
           :user   => 'nigel',
         })}
@@ -315,7 +315,7 @@ class { 'accounts':
         })}
         it { is_expected.to contain_ssh_authorized_key('ankou-on-bill').with({
           :ensure => 'absent',
-          :key    => "An_Ankoù's_Key",
+          :key    => "An_Ankou's_Key",
           :type   => 'ssh-rsa',
           :user   => 'bill',
         })}
