@@ -12,6 +12,8 @@ define accounts::account(
   $shell                    = $::accounts::shell,
   $home                     = undef,
   $password                 = undef,
+  $uid                      = undef,
+  $gid                      = undef,
 ) {
   $account = $user # for strformat mapping...
   if $user =~ /^@(\S+)$/ {
@@ -32,6 +34,8 @@ define accounts::account(
         shell                    => $shell,
         home                     => $home,
         password                 => $password,
+        uid                      => $uid,
+        gid                      => $gid,
       }
     )
   } else {
@@ -56,6 +60,8 @@ define accounts::account(
           managehome => true,
           membership => $groups_membership,
           shell      => $shell,
+          uid        => $uid,
+          gid        => $gid,
         },
         $::accounts::users[$name]
       )
