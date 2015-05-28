@@ -9,6 +9,8 @@ define accounts::account(
   $authorized_keys_target   = undef,
   $purge_ssh_keys           = $::accounts::purge_ssh_keys,
   $ssh_authorized_key_title = $::accounts::ssh_authorized_key_title,
+  $uid                      = undef,
+  $gid                      = undef,
 ) {
   $account = $user # for strformat mapping...
   if $user =~ /^@(\S+)$/ {
@@ -26,6 +28,8 @@ define accounts::account(
         authorized_keys_target   => $authorized_keys_target,
         purge_ssh_keys           => $purge_ssh_keys,
         ssh_authorized_key_title => $ssh_authorized_key_title,
+        uid                      => $uid,
+        gid                      => $gid,
       }
     )
   } else {
@@ -43,6 +47,8 @@ define accounts::account(
           home       => "/home/${$user}",
           managehome => true,
           membership => $groups_membership,
+          uid        => $uid,
+          gid        => $gid,
         },
         $::accounts::users[$name]
       )
