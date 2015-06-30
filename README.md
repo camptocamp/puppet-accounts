@@ -72,3 +72,47 @@ Creates a `bar` user if it exists in `$::accounts::users` and at allow its publi
 accounts::account { '@foo': }
 ```
 Create a user for every user in `foo` usergroup and allow its public key.
+
+
+Module Parameters
+-----------------
+
+###`groups`
+
+Hash of groups to create (passed to `create_resources`). Defaults to `{}`.
+
+###`groups_membership`
+
+Default value for the users' `membership` parameter. Refer to the Puppet documentation for more information.
+
+###`ssh_keys`
+
+Hash of SSH public keys that can be assigned to users (see _Usage_ above).
+
+###`users`
+
+Hash of users (see _Usage_ above).
+
+###`usergroups`
+
+Hash of user groups (see _Usage_ above).
+
+###`accounts`
+
+Hash of accounts to create (see _Usage_ above).
+
+###`start_uid`
+
+Sets the lowest uid for non system users. This is a system setting and also affects users created outside of this module.
+
+###`start_gid`
+
+Sets the lowest gid for non system groups. This is a system setting and also affects groups or users created outside of this module.
+
+###`purge_ssh_keys`
+
+Default value for users' `purge_ssh_keys` parameter. When `true` all SSH keys in a users `authorized_keys` file not managed by Puppet will be deleted. Defaults to `false`.
+
+###`shell`
+
+Default value for users' `shell` parameter. Default is the system default (usually `/bin/sh`).
