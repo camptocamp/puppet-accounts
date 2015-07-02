@@ -1,3 +1,7 @@
+## 2015-07-02 - Release 1.4.0
+
+Add shell parameter
+
 ## 2015-06-26 - Release 1.3.5
 
 Fix strict_variables activation with rspec-puppet 2.2
