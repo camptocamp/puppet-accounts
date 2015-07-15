@@ -10,6 +10,7 @@ define accounts::account(
   $purge_ssh_keys           = $::accounts::purge_ssh_keys,
   $ssh_authorized_key_title = $::accounts::ssh_authorized_key_title,
   $shell                    = $::accounts::shell,
+  $home                     = undef,
 ) {
   $account = $user # for strformat mapping...
   if $user =~ /^@(\S+)$/ {
@@ -28,6 +29,7 @@ define accounts::account(
         purge_ssh_keys           => $purge_ssh_keys,
         ssh_authorized_key_title => $ssh_authorized_key_title,
         shell                    => $shell,
+        home                     => $home,
       }
     )
   } else {
@@ -37,12 +39,16 @@ define accounts::account(
       } else {
         $_purge_ssh_keys = $purge_ssh_keys
       }
+      $_home = $home ? {
+        undef   => "/home/${$user}",
+        default => $home,
+      }
       $hash = merge(
         {
           ensure     => $ensure,
           comment    => $comment,
           groups     => $groups,
-          home       => "/home/${$user}",
+          home       => $_home,
           managehome => true,
           membership => $groups_membership,
           shell      => $shell,
