@@ -11,6 +11,7 @@ define accounts::account(
   $ssh_authorized_key_title = $::accounts::ssh_authorized_key_title,
   $shell                    = $::accounts::shell,
   $home                     = undef,
+  $password                 = undef,
 ) {
   $account = $user # for strformat mapping...
   if $user =~ /^@(\S+)$/ {
@@ -30,6 +31,7 @@ define accounts::account(
         ssh_authorized_key_title => $ssh_authorized_key_title,
         shell                    => $shell,
         home                     => $home,
+        password                 => $password,
       }
     )
   } else {
@@ -43,12 +45,17 @@ define accounts::account(
         undef   => "/home/${$user}",
         default => $home,
       }
+      $_password = $password ? {
+        undef   => '!',
+        default => $password,
+      }
       $hash = merge(
         {
           ensure     => $ensure,
           comment    => $comment,
           groups     => $groups,
           home       => $_home,
+          password   => $_password,
           managehome => true,
           membership => $groups_membership,
           shell      => $shell,
