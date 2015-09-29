@@ -103,6 +103,7 @@ class { 'accounts':
     'matt'  => {
       'comment' => 'Matt M.',
       'uid'     => 1009,
+      'gid'     => 6666,
     },
   },
   usergroups => {
@@ -143,6 +144,26 @@ class { 'accounts':
           :home           => '/home/matt',
           :managehome     => false,
           :uid            => 1009,
+        })}
+      end
+
+      context 'when user and custom gid' do
+        let(:title) { 'matt' }
+        it { is_expected.to compile.with_all_deps }
+        it { is_expected.to have_user_resource_count(1) }
+        it { is_expected.to contain_group('matt').with({
+          :name           => 'matt',
+          :gid            => 6666,
+        })}
+        it { is_expected.to contain_user('matt').with({
+          :name           => 'matt',
+          :ensure         => 'present',
+          :comment        => 'Matt M.',
+          :groups         => [],
+          :home           => '/home/matt',
+          :managehome     => true,
+          :uid            => 1009,
+          :gid            => 6666,
         })}
       end
 
