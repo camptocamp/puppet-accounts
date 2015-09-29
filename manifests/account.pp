@@ -80,7 +80,7 @@ define accounts::account(
       ensure_resource(
         group,
         $user,
-        {gid => $_hash[gid]}
+        {ensure => $_hash[ensure], gid => $_hash[gid]}
       )
 
       ensure_resource(
