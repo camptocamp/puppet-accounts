@@ -129,17 +129,13 @@ class { 'accounts':
         })}
       end
 
-      context 'when removing user with custom gid' do
+      context 'when removing user' do
         let(:title) { 'matt' }
         let(:params) {{
           :ensure => 'absent',
         }}
         it { is_expected.to compile.with_all_deps }
         it { is_expected.to have_user_resource_count(1) }
-        it { is_expected.to contain_group('matt').with({
-          :name           => 'matt',
-          :ensure         => 'absent',
-        })}
         it { is_expected.to contain_user('matt').with({
           :name           => 'matt',
           :ensure         => 'absent',
