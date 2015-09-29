@@ -76,6 +76,13 @@ define accounts::account(
       } else {
         $_hash = $hash
       }
+
+      ensure_resource(
+        group,
+        $user,
+        {gid => $_hash[gid]}
+      )
+
       ensure_resource(
         user,
         $user,
