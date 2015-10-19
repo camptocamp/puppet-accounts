@@ -133,12 +133,14 @@ define accounts::account(
       }
     }
 
-    $keys_to_remove = suffix(keys(absents($::accounts::ssh_keys)), "-on-${name}")
-    accounts::authorized_key { $keys_to_remove:
-      ensure                   => absent,
-      account                  => $name,
-      target                   => $authorized_keys_target,
-      ssh_authorized_key_title => $ssh_authorized_key_title,
+    if ! $purge_ssh_keys {
+      $keys_to_remove = suffix(keys(absents($::accounts::ssh_keys)), "-on-${name}")
+      accounts::authorized_key { $keys_to_remove:
+        ensure                   => absent,
+        account                  => $name,
+        target                   => $authorized_keys_target,
+        ssh_authorized_key_title => $ssh_authorized_key_title,
+      }
     }
   }
 }
