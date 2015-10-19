@@ -1,3 +1,9 @@
+## 2015-10-19 - Release 1.6.0
+
+Add ability to set a password hash for a user
+Add uid and gid params to accounts::account
+Don't create absent ssh_authorized_key resources if purge_ssh_keys is enabled
+
 ## 2015-08-21 - Release 1.5.1
 
 Use docker for acceptance tests
