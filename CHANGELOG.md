@@ -1,3 +1,7 @@
+## 2015-11-12 - Release 1.7.0
+
+Allow to set options to ssh_authorized_key
+
 ## 2015-10-19 - Release 1.6.0
 
 Add ability to set a password hash for a user
