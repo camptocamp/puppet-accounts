@@ -14,6 +14,7 @@ define accounts::account(
   $password                 = undef,
   $uid                      = undef,
   $gid                      = undef,
+  $ssh_options              = undef,
 ) {
   $account = $user # for strformat mapping...
   if $user =~ /^@(\S+)$/ {
@@ -92,6 +93,7 @@ define accounts::account(
         }
         accounts::authorized_key { $_authorized_keys:
           account                  => $name,
+          options                  => $ssh_options,
           target                   => $authorized_keys_target,
           ssh_authorized_key_title => $ssh_authorized_key_title,
         }
@@ -104,6 +106,7 @@ define accounts::account(
           accounts::authorized_key,
           $_authorized_keys,
           {
+            options                  => $ssh_options,
             target                   => $authorized_keys_target,
             ssh_authorized_key_title => $ssh_authorized_key_title,
           }
