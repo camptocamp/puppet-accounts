@@ -11,6 +11,7 @@ define accounts::account(
   $ssh_authorized_key_title = $::accounts::ssh_authorized_key_title,
   $shell                    = $::accounts::shell,
   $home                     = undef,
+  $managehome               = $::accounts::managehome,
   $password                 = undef,
 ) {
   $account = $user # for strformat mapping...
@@ -53,7 +54,7 @@ define accounts::account(
           groups     => $groups,
           home       => $_home,
           password   => $password,
-          managehome => true,
+          managehome => $managehome,
           membership => $groups_membership,
           shell      => $shell,
         },
