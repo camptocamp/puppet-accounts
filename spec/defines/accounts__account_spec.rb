@@ -128,6 +128,24 @@ class { 'accounts':
         })}
       end
 
+      context 'when user and managehome false' do
+        let(:title) { 'matt' }
+        let(:params) {{
+          :managehome => false,
+        }}
+        it { is_expected.to compile.with_all_deps }
+        it { is_expected.to have_user_resource_count(1) }
+        it { is_expected.to contain_user('matt').with({
+          :name           => 'matt',
+          :ensure         => 'present',
+          :comment        => 'Matt M.',
+          :groups         => [],
+          :home           => '/home/matt',
+          :managehome     => false,
+          :uid            => 1009,
+        })}
+      end
+
       context 'when user but no key' do
         let(:title) { 'matt' }
         it { is_expected.to compile.with_all_deps }

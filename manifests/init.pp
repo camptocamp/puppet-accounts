@@ -11,6 +11,7 @@ class accounts(
   $purge_ssh_keys           = false,
   $ssh_authorized_key_title = '%{ssh_key}-on-%{account}',
   $shell                    = undef,
+  $managehome               = true,
 ) {
   include ::accounts::config
 
