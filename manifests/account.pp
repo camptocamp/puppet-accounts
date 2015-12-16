@@ -41,49 +41,45 @@ define accounts::account(
       }
     )
   } else {
-    if has_key($::accounts::users, $user) {
-      if $purge_ssh_keys and $authorized_keys_target {
-        $_purge_ssh_keys = strformat($authorized_keys_target)
-      } else {
-        $_purge_ssh_keys = $purge_ssh_keys
-      }
-      $_home = $home ? {
-        undef   => "/home/${$user}",
-        default => $home,
-      }
-
-      $hash = merge(
-        {
-          ensure     => $ensure,
-          comment    => $comment,
-          groups     => $groups,
-          home       => $_home,
-          password   => $password,
-          managehome => $managehome,
-          membership => $groups_membership,
-          shell      => $shell,
-          uid        => $uid,
-          gid        => $gid,
-        },
-        $::accounts::users[$name]
-      )
-
-      if versioncmp($::puppetversion, '3.6.0') >= 0 {
-        $_hash = merge(
-          $hash,
-          {
-            purge_ssh_keys => $_purge_ssh_keys,
-          }
-        )
-      } else {
-        $_hash = $hash
-      }
-      ensure_resource(
-        user,
-        $user,
-        $_hash
-      )
+    if $purge_ssh_keys and $authorized_keys_target {
+      $_purge_ssh_keys = strformat($authorized_keys_target)
+    } else {
+      $_purge_ssh_keys = $purge_ssh_keys
     }
+    $_home = $home ? {
+      undef   => "/home/${$user}",
+      default => $home,
+    }
+    $hash1 = {
+      ensure     => $ensure,
+      comment    => $comment,
+      groups     => $groups,
+      home       => $_home,
+      password   => $password,
+      managehome => $managehome,
+      membership => $groups_membership,
+      shell      => $shell,
+      uid        => $uid,
+      gid        => $gid,
+    }
+
+    if versioncmp($::puppetversion, '3.6.0') >= 0 {
+      $hash2 = merge($hash1, { purge_ssh_keys => $_purge_ssh_keys, } )
+    } else {
+      $hash2 = $hash1
+    }
+
+    if has_key($::accounts::users, $user) {
+      $hash3 = merge($hash2, $::accounts::users[$name])
+    } else {
+      $hash3 = $hash2
+    }
+
+    ensure_resource(
+      user,
+      $user,
+      $hash3
+    )
 
     if $ensure != absent {
       if is_string($authorized_keys) or is_array($authorized_keys) {
