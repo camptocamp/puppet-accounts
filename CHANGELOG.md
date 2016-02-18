@@ -1,3 +1,7 @@
+## 2016-02-18 - Release 1.8.0
+
+Parameterize managehome (issue #21)
+
 ## 2015-11-12 - Release 1.7.0
 
 Allow to set options to ssh_authorized_key
