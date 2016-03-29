@@ -1,8 +1,13 @@
 source ENV['GEM_SOURCE'] || "https://rubygems.org"
 
 group :development, :unit_tests do
-  gem 'rake',                                              :require => false
-  gem 'rspec', '< 3.2',                                    :require => false if RUBY_VERSION =~ /^1\.8/
+  if RUBY_VERSION =~ /^1\.8/
+    gem 'rake',  '< 11',                                   :require => false
+    gem 'rspec', '>= 3', '< 3.2',                          :require => false
+  else
+    gem 'rake',                                            :require => false
+    gem 'rspec', '~> 3.0',                                 :require => false
+  end
   gem 'rspec-puppet',                                      :require => false
   gem 'puppetlabs_spec_helper',                            :require => false
   gem 'metadata-json-lint',                                :require => false
