@@ -22,6 +22,7 @@ class accounts(
   # Remove users marked as absent
   $absent_users = keys(absents($users))
   user { $absent_users:
-    ensure => absent,
+    ensure     => absent,
+    managehome => $managehome,
   }
 }
