@@ -8,7 +8,10 @@ describe Puppet::Parser::Functions.function(:strformat) do
   end
 
   it 'should raise a ParseError if there is less than 1 argument' do
-    expect { scope.function_strformat([]) }.to raise_error(Puppet::ParseError)
+    Puppet[:code] = <<-'ENDofPUPPETcode'
+      if strformat() != '' { }
+    ENDofPUPPETcode
+    expect { scope.compiler.compile }.to raise_error(Puppet::ParseError)
   end
 
   it 'should lookup a string variables' do
