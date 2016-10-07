@@ -101,6 +101,10 @@ Hash of user groups (see _Usage_ above).
 
 Hash of accounts to create (see _Usage_ above).
 
+###`forcelocal`
+
+Set the resource "user" parameter so that the users are not created/supressed in external user directories (i.e. LDAP). 
+
 ###`start_uid`
 
 Sets the lowest uid for non system users. This is a system setting and also affects users created outside of this module.

@@ -12,6 +12,7 @@ class accounts(
   $ssh_authorized_key_title = '%{ssh_key}-on-%{account}',
   $shell                    = undef,
   $managehome               = true,
+  $forcelocal               = true,
 ) {
   include ::accounts::config
 
@@ -22,6 +23,7 @@ class accounts(
   # Remove users marked as absent
   $absent_users = keys(absents($users))
   user { $absent_users:
-    ensure => absent,
+    ensure     => absent,
+    forcelocal => $forcelocal,
   }
 }
