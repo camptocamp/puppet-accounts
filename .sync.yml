@@ -1,6 +1,3 @@
 ---
 .travis.yml:
   forge_password: "cigHpMryWewlnZKALuS6zQUDpqKSJs7eg0BYpH2mwHRHjJlIm299njXDKN/8eyfVadn/bXa4LSGoxtPQywuNp0nWfZUpY5j7ay+78drMAGoFxvKjthBt34ds6B2Pq9VvJvxA6xikQxk7sgJy0MNj1wv/kLZs7WvnAeokhIbwRGQ="
-  extras:
-    - rvm: 1.9.3
-      env: PUPPET_GEM_VERSION="~> 3.5.0"
