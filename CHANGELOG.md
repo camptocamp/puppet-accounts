@@ -1,3 +1,12 @@
+## 2017-01-10 - Release 1.9.0
+
+Remove Puppet 3 support
+Fix ParseError test
+
+## 2016-06-20 - Release 1.8.1
+
+Update test files
+
 ## 2016-02-18 - Release 1.8.0
 
 Parameterize managehome (issue #21)
