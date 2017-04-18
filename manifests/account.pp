@@ -81,6 +81,26 @@ define accounts::account(
       } else {
         $_hash = $hash
       }
+
+      # if you're giving a user's primary group a custom GID, you need to create
+      # it before you create the user. the puppet user type assumes the GID
+      # you're giving it for user's primary group already exists. in the case
+      # where you don't specify the GID, puppet just selects the next available
+      # GID.
+      #
+      # in the case where we're deleting the user, puppet will delete the user's
+      # primary group automatically, regardless of what the GID is set to. but
+      # if you try to delete the user's primary group before deleting the user,
+      # you'll get an error about how you "cannot remove the primary group of
+      # user blah"
+      if $ensure != absent {
+        ensure_resource(
+          group,
+          $user,
+          {gid => $_hash[gid]}
+        )
+      }
+
       ensure_resource(
         user,
         $user,
