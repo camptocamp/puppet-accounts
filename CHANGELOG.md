@@ -1,3 +1,7 @@
+## 2017-05-22 - Release 1.9.2
+
+Fix automated release system
+
 ## 2017-01-10 - Release 1.9.0
 
 Remove Puppet 3 support
