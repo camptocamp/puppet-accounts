@@ -3,6 +3,7 @@ define accounts::account(
   $ensure                   = present,
   $comment                  = undef,
   $user                     = $name,
+  $expiry                   = undef,
   $groups                   = [],
   $groups_membership        = $::accounts::groups_membership,
   $authorized_keys          = [],
@@ -67,6 +68,7 @@ define accounts::account(
           shell      => $shell,
           uid        => $uid,
           gid        => $gid,
+          expiry     => $expiry,
         },
         $::accounts::users[$name]
       )
