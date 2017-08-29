@@ -41,7 +41,7 @@ define accounts::authorized_key(
       ssh_authorized_key { $_ssh_authorized_key_title:
         ensure  => $ensure,
         key     => $::accounts::ssh_keys[$ssh_key]['public'],
-        options => $options,
+        options => $::accounts::ssh_keys[$ssh_key]['options'],
         target  => $_target,
         type    => $::accounts::ssh_keys[$ssh_key]['type'],
         user    => $_user,
