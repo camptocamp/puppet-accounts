@@ -140,7 +140,7 @@ define accounts::account(
       }
     }
 
-    if ! $purge_ssh_keys {
+    if ! $purge_ssh_keys or ! has_key($::accounts::users, $user) {
       $keys_to_remove = suffix(keys(absents($::accounts::ssh_keys)), "-on-${name}")
       accounts::authorized_key { $keys_to_remove:
         ensure                   => absent,
