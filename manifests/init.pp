@@ -24,6 +24,7 @@ class accounts(
   $absent_users = keys(absents($users))
   user { $absent_users:
     ensure     => absent,
+    managehome => $managehome,
     forcelocal => $forcelocal,
   }
 }
