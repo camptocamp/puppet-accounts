@@ -16,7 +16,6 @@ define accounts::account(
   $password                 = undef,
   $uid                      = undef,
   $gid                      = undef,
-  $system                   = undef,
   $ssh_options              = undef,
 ) {
   $account = $user # for strformat mapping...
@@ -41,7 +40,6 @@ define accounts::account(
         password                 => $password,
         uid                      => $uid,
         gid                      => $gid,
-        system                   => $system,
       }
     )
   } else {
@@ -68,7 +66,6 @@ define accounts::account(
           shell      => $shell,
           uid        => $uid,
           gid        => $gid,
-          system     => $system,
         },
         $::accounts::users[$name],
         { groups => $groups.concat($::accounts::users[$name][groups].pick([])).flatten.unique }
