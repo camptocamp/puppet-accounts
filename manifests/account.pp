@@ -41,6 +41,7 @@ define accounts::account(
         password                 => $password,
         uid                      => $uid,
         gid                      => $gid,
+        ssh_options              => $ssh_options,
         system                   => $system,
       }
     )
