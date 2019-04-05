@@ -16,6 +16,7 @@ define accounts::account(
   $password                 = undef,
   $uid                      = undef,
   $gid                      = undef,
+  $system                   = undef,
   $ssh_options              = undef,
 ) {
   $account = $user # for strformat mapping...
@@ -41,6 +42,7 @@ define accounts::account(
         uid                      => $uid,
         gid                      => $gid,
         ssh_options              => $ssh_options,
+        system                   => $system,
       }
     )
   } else {
@@ -68,6 +70,7 @@ define accounts::account(
           shell      => $shell,
           uid        => $uid,
           gid        => $gid,
+          system     => $system,
         },
         $::accounts::users[$name]
       )
