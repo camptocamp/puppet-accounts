@@ -61,7 +61,6 @@ define accounts::account(
         {
           ensure     => $ensure,
           comment    => $comment,
-          groups     => $groups,
           home       => $_home,
           password   => $password,
           managehome => $managehome,
@@ -72,7 +71,8 @@ define accounts::account(
           gid        => $gid,
           system     => $system,
         },
-        $::accounts::users[$name]
+        $::accounts::users[$name],
+        { groups => $groups.concat($::accounts::users[$name][groups].pick([])).flatten.unique }
       )
 
       if versioncmp($::puppetversion, '3.6.0') >= 0 {
