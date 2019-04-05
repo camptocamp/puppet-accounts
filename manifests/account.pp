@@ -17,6 +17,7 @@ define accounts::account(
   $password                 = undef,
   $uid                      = undef,
   $gid                      = undef,
+  $system                   = undef,
   $ssh_options              = undef,
 ) {
   $account = $user # for strformat mapping...
@@ -41,6 +42,8 @@ define accounts::account(
         password                 => $password,
         uid                      => $uid,
         gid                      => $gid,
+        ssh_options              => $ssh_options,
+        system                   => $system,
       }
     )
   } else {
@@ -59,7 +62,6 @@ define accounts::account(
         {
           ensure     => $ensure,
           comment    => $comment,
-          groups     => $groups,
           home       => $_home,
           password   => $password,
           managehome => $managehome,
@@ -69,8 +71,10 @@ define accounts::account(
           uid        => $uid,
           gid        => $gid,
           expiry     => $expiry,
+          system     => $system,
         },
-        $::accounts::users[$name]
+        $::accounts::users[$name],
+        { groups => $groups.concat($::accounts::users[$name][groups].pick([])).flatten.unique }
       )
 
       if versioncmp($::puppetversion, '3.6.0') >= 0 {
@@ -142,7 +146,7 @@ define accounts::account(
       }
     }
 
-    if ! $purge_ssh_keys {
+    if ! $purge_ssh_keys or ! has_key($::accounts::users, $user) {
       $keys_to_remove = suffix(keys(absents($::accounts::ssh_keys)), "-on-${name}")
       accounts::authorized_key { $keys_to_remove:
         ensure                   => absent,

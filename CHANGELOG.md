@@ -1,3 +1,7 @@
+## 2018-01-03 - Release 1.10.0
+
+Remove absent keys when user resource not managed by module
+
 ## 2017-05-22 - Release 1.9.3
 
 Really fix automated release system...

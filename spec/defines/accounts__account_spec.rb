@@ -61,7 +61,19 @@ class { 'accounts':
       'ensure' => 'absent',
       'type'   => 'ssh-rsa',
       'public'    => "An_Ankou's_Key",
-    }
+    },
+    'brad' => {
+      'type'   => 'ssh-rsa',
+      'public' => "Brad's_Key",
+    },
+    'robin' => {
+      'type'   => 'ssh-rsa',
+      'public' => "Robin's_Key",
+    },
+    'clarence' => {
+      'type'   => 'ssh-rsa',
+      'public' => "Clarence's_Key",
+    },
   },
   users      => {
     'luke' => {
@@ -104,12 +116,35 @@ class { 'accounts':
       'comment' => 'Matt M.',
       'uid'     => 1009,
     },
+    'brad' => {
+      'comment' => 'Brad K.',
+      'uid'    => 1010,
+      'groups' => [ 'testgroup2' ]
+    },
+    'robin' => {
+      'comment' => 'Robin K.',
+      'uid'     => 1011,
+      'groups' => [ 'testgroup1' ]
+    },
+    'clarence' => {
+      'comment' => 'Clarence T.',
+      'uid'     => 1012
+    },
+  },
+  groups => {
+    testgroup1 => {
+      gid => 3000
+    },
+    testgroup2 => {
+      gid => 3001
+    },
   },
   usergroups => {
-    'management' => [ 'luke', 'nigel', 'bill', ],
-    'directors'  => [ 'puneet', 'kevin', 'luke', 'raghu', 'kenny', ],
-    'observers'  => [ 'karim', 'phil', 'matt', ],
-    'advisors'   => [ 'beth', 'sharmila', ],
+    'vicepresidents' => [ 'brad', 'robin', 'clarence', ],
+    'management'     => [ 'luke', 'nigel', 'bill', ],
+    'directors'      => [ 'puneet', 'kevin', 'luke', 'raghu', 'kenny', ],
+    'observers'      => [ 'karim', 'phil', 'matt', ],
+    'advisors'       => [ 'beth', 'sharmila', ],
   },
 }
         EOS
@@ -340,6 +375,76 @@ class { 'accounts':
           :user   => 'bill',
         })}
       end
+
+      context 'when creating accounts for @vicepresidents with accounts:groups' do
+        let(:title) { '@vicepresidents' }
+        let(:params) {{
+          :groups => [ 'testgroup1' ]
+        }}
+        it { is_expected.to compile.with_all_deps }
+        it { is_expected.to have_user_resource_count(3) }
+        it { is_expected.to contain_user('brad').with({
+          :name           => 'brad',
+          :ensure         => 'present',
+          :comment        => 'Brad K.',
+          :groups         => [ 'testgroup1', 'testgroup2' ],
+          :home           => '/home/brad',
+          :managehome     => true,
+          :uid            => 1010,
+        })}
+        it { is_expected.to contain_user('robin').with({
+          :name           => 'robin',
+          :ensure         => 'present',
+          :comment        => 'Robin K.',
+          :groups         => [ 'testgroup1' ],
+          :home           => '/home/robin',
+          :managehome     => true,
+          :uid            => 1011,
+        })}
+        it { is_expected.to contain_user('clarence').with({
+          :name           => 'clarence',
+          :ensure         => 'present',
+          :comment        => 'Clarence T.',
+          :groups         => [ 'testgroup1' ],
+          :home           => '/home/clarence',
+          :managehome     => true,
+          :uid            => 1012,
+        })}
+      end
+
+      context 'when creating accounts for @vicepresidents without accounts:groups' do
+        let(:title) { '@vicepresidents' }
+        it { is_expected.to compile.with_all_deps }
+        it { is_expected.to have_user_resource_count(3) }
+        it { is_expected.to contain_user('brad').with({
+          :name           => 'brad',
+          :ensure         => 'present',
+          :comment        => 'Brad K.',
+          :groups         => [ 'testgroup2' ],
+          :home           => '/home/brad',
+          :managehome     => true,
+          :uid            => 1010,
+        })}
+        it { is_expected.to contain_user('robin').with({
+          :name           => 'robin',
+          :ensure         => 'present',
+          :comment        => 'Robin K.',
+          :groups         => [ 'testgroup1' ],
+          :home           => '/home/robin',
+          :managehome     => true,
+          :uid            => 1011,
+        })}
+        it { is_expected.to contain_user('clarence').with({
+          :name           => 'clarence',
+          :ensure         => 'present',
+          :comment        => 'Clarence T.',
+          :groups         => [],
+          :home           => '/home/clarence',
+          :managehome     => true,
+          :uid            => 1012,
+        })}
+      end
+
     end
   end
 end

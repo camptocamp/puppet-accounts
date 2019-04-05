@@ -14,10 +14,9 @@ Puppet::Parser::Functions.newfunction(:strformat, :type => :rvalue, :doc => <<-'
   raise(Puppet::ParseError, "strformat(): Wrong number of arguments given") if args.size != 1
   raise(Puppet::ParseError, "strformat(): First parameter must be a string") if args[0].class != String
 
-  def strformat(format, arg)
-    new = format.gsub(/%\{([^%\[\}]+)([^%\}]*)\}/) { eval("arg[$1]#{$2}") }
-    (new =~ /%/) ? strformat(new, arg) : new
+  result = args[0]
+  while result =~ /%/
+    result = result.gsub(/%\{([^%\[\}]+)([^%\}]*)\}/) { eval("self[$1]#{$2}") }
   end
-
-  strformat(args[0], self.to_hash)
+  result
 end
