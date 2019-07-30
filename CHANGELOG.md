@@ -1,3 +1,7 @@
+## 2019-07-30 - Release 1.11.1
+
+- Allow augeasproviders_shellvar 4
+
 ## 2019-07-30 - Release 1.11.0
 
 - Add system option to accounts::account (#60)
