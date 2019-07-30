@@ -12,6 +12,7 @@
 - Allow augeasproviders_shellvar 3.x
 - Fix puppet error if the account is not yet created (#41)
 - Allow stdlib 5 & 6
+- Fix tests on Puppet 6
 
 ## 2018-01-03 - Release 1.10.0
 
