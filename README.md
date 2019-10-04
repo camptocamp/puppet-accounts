@@ -14,9 +14,9 @@ First, you have to declare your `ssh_keys`, `users` and `usergroups` hashes:
 
 ```puppet
 class { 'accounts':
-  ssh_keys   => hiera_hash('accounts::ssh_keys', {}),
-  users      => hiera_hash('accounts::users', {}),
-  usergroups => hiera_hash('accounts::usergroups', {}),
+  ssh_keys   => lookup('accounts::ssh_keys', Hash, 'hash', {}),
+  users      => lookup('accounts::users', Hash, 'hash', {}),
+  usergroups => lookup('accounts::usergroups', 'Hash, 'hash', {}),
 }
 ```
 
