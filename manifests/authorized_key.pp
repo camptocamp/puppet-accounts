@@ -38,10 +38,16 @@ define accounts::authorized_key(
         $_user   = 'root'
         $_target = strformat($target)
       }
+      if $::accounts::ssh_keys[$ssh_key]['options'] {
+        $_options = $::accounts::ssh_keys[$ssh_key]['options']
+      } else {
+        $_options = $options
+      }
+
       ssh_authorized_key { $_ssh_authorized_key_title:
         ensure  => $ensure,
         key     => $::accounts::ssh_keys[$ssh_key]['public'],
-        options => $::accounts::ssh_keys[$ssh_key]['options'],
+        options => $_options,
         target  => $_target,
         type    => $::accounts::ssh_keys[$ssh_key]['type'],
         user    => $_user,
