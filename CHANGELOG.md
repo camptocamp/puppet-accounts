@@ -1,165 +1,234 @@
-## 2019-07-30 - Release 1.11.1
+<!-- markdownlint-disable MD024 -->
+# Changelog
 
-- Allow augeasproviders_shellvar 4
+All notable changes to this project will be documented in this file.
 
-## 2019-07-30 - Release 1.11.0
+The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
-- Add system option to accounts::account (#60)
-- Fix beaker version
-- Do not use legacy puppet-lint-absolute_classname-check plugin
-- Pass through managehome on absent (#62) (fix #61)
-- strformat function: use loop instead of recursion (#64)
-- Allow ssh_options for accounts being created through accounts::usergroups as well (#66) 
-- Merge group arrays instead of rightmost precedence (#65)
-- Add expiry parameter (#55)
-- Add additional prerequisite (#53)
-- Allow augeasproviders_shellvar 3.x
-- Fix puppet error if the account is not yet created (#41)
-- Allow stdlib 5 & 6
-- Fix tests on Puppet 6
+## [2.0.1](https://github.com/camptocamp/puppet-accounts/tree/2.0.1) - 2023-10-11
 
-## 2018-01-03 - Release 1.10.0
+[Full Changelog](https://github.com/camptocamp/puppet-accounts/compare/2.0.0...2.0.1)
 
-Remove absent keys when user resource not managed by module
+### Other
 
-## 2017-05-22 - Release 1.9.3
+- ⬆️ Deprecate has_key [#70](https://github.com/camptocamp/puppet-accounts/pull/70) ([JGodin-C2C](https://github.com/JGodin-C2C))
 
-Really fix automated release system...
+## [2.0.0](https://github.com/camptocamp/puppet-accounts/tree/2.0.0) - 2023-10-11
 
-## 2017-05-22 - Release 1.9.2
+[Full Changelog](https://github.com/camptocamp/puppet-accounts/compare/1.11.1...2.0.0)
 
-Fix automated release system
+### Other
 
-## 2017-01-10 - Release 1.9.0
+- ⬆️ Deprecate has_key [#70](https://github.com/camptocamp/puppet-accounts/pull/70) ([JGodin-C2C](https://github.com/JGodin-C2C))
+- Fix pull #66 again after pull #56 was merged [#68](https://github.com/camptocamp/puppet-accounts/pull/68) ([erik-frontify](https://github.com/erik-frontify))
 
-Remove Puppet 3 support
-Fix ParseError test
+## [1.11.1](https://github.com/camptocamp/puppet-accounts/tree/1.11.1) - 2019-07-30
 
-## 2016-06-20 - Release 1.8.1
+[Full Changelog](https://github.com/camptocamp/puppet-accounts/compare/1.11.0...1.11.1)
 
-Update test files
+## [1.11.0](https://github.com/camptocamp/puppet-accounts/tree/1.11.0) - 2019-07-30
 
-## 2016-02-18 - Release 1.8.0
+[Full Changelog](https://github.com/camptocamp/puppet-accounts/compare/1.10.0...1.11.0)
 
-Parameterize managehome (issue #21)
+### Other
 
-## 2015-11-12 - Release 1.7.0
+- Allow ssh_options for accounts being created through accounts::usergr… [#66](https://github.com/camptocamp/puppet-accounts/pull/66) ([erik-frontify](https://github.com/erik-frontify))
+- Merge group arrays instead of rightmost precedence [#65](https://github.com/camptocamp/puppet-accounts/pull/65) ([kobybr](https://github.com/kobybr))
+- Use loop instead of recursion [#64](https://github.com/camptocamp/puppet-accounts/pull/64) ([seidler2547](https://github.com/seidler2547))
+- Fixes #61 - Pass through managehome on absent [#62](https://github.com/camptocamp/puppet-accounts/pull/62) ([edestecd](https://github.com/edestecd))
+- Update to add the system option to account.pp [#60](https://github.com/camptocamp/puppet-accounts/pull/60) ([mooresm1](https://github.com/mooresm1))
+- Correcting issue #15 [#56](https://github.com/camptocamp/puppet-accounts/pull/56) ([jschaeff](https://github.com/jschaeff))
+- added expiry parameter [#55](https://github.com/camptocamp/puppet-accounts/pull/55) ([cjeanneret](https://github.com/cjeanneret))
+- Add additional prerequisite [#53](https://github.com/camptocamp/puppet-accounts/pull/53) ([trevharmon](https://github.com/trevharmon))
+- Fix puppet error if the account is not yet created [#41](https://github.com/camptocamp/puppet-accounts/pull/41) ([Zophar78](https://github.com/Zophar78))
 
-Allow to set options to ssh_authorized_key
+## [1.10.0](https://github.com/camptocamp/puppet-accounts/tree/1.10.0) - 2018-01-03
 
-## 2015-10-19 - Release 1.6.0
+[Full Changelog](https://github.com/camptocamp/puppet-accounts/compare/1.9.3...1.10.0)
 
-Add ability to set a password hash for a user
-Add uid and gid params to accounts::account
-Don't create absent ssh_authorized_key resources if purge_ssh_keys is enabled
+## [1.9.3](https://github.com/camptocamp/puppet-accounts/tree/1.9.3) - 2017-05-26
 
-## 2015-08-21 - Release 1.5.1
+[Full Changelog](https://github.com/camptocamp/puppet-accounts/compare/1.9.2...1.9.3)
 
-Use docker for acceptance tests
+## [1.9.2](https://github.com/camptocamp/puppet-accounts/tree/1.9.2) - 2017-05-22
 
-## 2015-07-15 - Release 1.5.0
+[Full Changelog](https://github.com/camptocamp/puppet-accounts/compare/1.9.1...1.9.2)
 
-Add home parameter
+### Other
 
-## 2015-07-02 - Release 1.4.0
+- Remove now unsupported "pe" requirement [#52](https://github.com/camptocamp/puppet-accounts/pull/52) ([dabelenda](https://github.com/dabelenda))
 
-Add shell parameter
+## [1.9.1](https://github.com/camptocamp/puppet-accounts/tree/1.9.1) - 2017-03-31
 
-## 2015-06-26 - Release 1.3.5
+[Full Changelog](https://github.com/camptocamp/puppet-accounts/compare/1.9.0...1.9.1)
 
-Fix strict_variables activation with rspec-puppet 2.2
+### Other
 
-## 2015-05-28 - Release 1.3.4
+- Force managing local users. [#45](https://github.com/camptocamp/puppet-accounts/pull/45) ([dabelenda](https://github.com/dabelenda))
 
-Add beaker_spec_helper to Gemfile
+## [1.9.0](https://github.com/camptocamp/puppet-accounts/tree/1.9.0) - 2017-01-10
 
-## 2015-05-26 - Release 1.3.3
+[Full Changelog](https://github.com/camptocamp/puppet-accounts/compare/1.8.1...1.9.0)
 
-Use random application order in nodeset
+### Other
 
-## 2015-05-26 - Release 1.3.2
+- delete .travis.yml.swp [#39](https://github.com/camptocamp/puppet-accounts/pull/39) ([igalic](https://github.com/igalic))
 
-add utopic & vivid nodesets
+## [1.8.1](https://github.com/camptocamp/puppet-accounts/tree/1.8.1) - 2016-06-20
 
-## 2015-05-25 - Release 1.3.1
+[Full Changelog](https://github.com/camptocamp/puppet-accounts/compare/1.8.0...1.8.1)
 
-Don't allow failure on Puppet 4
+## [1.8.0](https://github.com/camptocamp/puppet-accounts/tree/1.8.0) - 2016-02-18
 
-## 2015-05-22 - Release 1.3.0
+[Full Changelog](https://github.com/camptocamp/puppet-accounts/compare/1.7.0...1.8.0)
 
-Fix User resource title when $user != $name
-purge_ssh_key is actually supported in 3.6.0
-Add support for user comment
+### Other
 
-## 2015-05-13 - Release 1.2.2
+- parameterize managehome instead of hardcoding to true [#21](https://github.com/camptocamp/puppet-accounts/pull/21) ([mmckinst](https://github.com/mmckinst))
 
-Add puppet-lint-file_source_rights-check gem
+## [1.7.0](https://github.com/camptocamp/puppet-accounts/tree/1.7.0) - 2015-11-12
 
-## 2015-05-12 - Release 1.2.1
+[Full Changelog](https://github.com/camptocamp/puppet-accounts/compare/1.6.0...1.7.0)
 
-Don't pin beaker
+### Other
 
-## 2015-05-07 - Release 1.2.0
+- Allow to set options to ssh_authorized_key [#24](https://github.com/camptocamp/puppet-accounts/pull/24) ([mcanevet](https://github.com/mcanevet))
 
-Add support for changing users default membership
+## [1.6.0](https://github.com/camptocamp/puppet-accounts/tree/1.6.0) - 2015-10-19
 
-## 2015-04-27 - Release 1.1.11
+[Full Changelog](https://github.com/camptocamp/puppet-accounts/compare/1.5.1...1.6.0)
 
-Add nodeset ubuntu-12.04-x86_64-openstack
+### Other
 
-## 2015-04-03 - Release 1.1.10
+- Don't create absent ssh_authorized_key resources if purge_ssh_keys is… [#22](https://github.com/camptocamp/puppet-accounts/pull/22) ([mcanevet](https://github.com/mcanevet))
+- Add ability to set a password hash for a user. Undef = !. [#18](https://github.com/camptocamp/puppet-accounts/pull/18) ([johnzimm](https://github.com/johnzimm))
+- Add uid and gid params to accounts::account [#14](https://github.com/camptocamp/puppet-accounts/pull/14) ([mcanevet](https://github.com/mcanevet))
 
-Confine rspec pinning to ruby 1.8
+## [1.5.1](https://github.com/camptocamp/puppet-accounts/tree/1.5.1) - 2015-08-21
 
-## 2015-03-24 - Release 1.1.9
+[Full Changelog](https://github.com/camptocamp/puppet-accounts/compare/1.5.0...1.5.1)
 
-Various spec improvements
+## [1.5.0](https://github.com/camptocamp/puppet-accounts/tree/1.5.0) - 2015-07-15
 
-## 2015-02-24 - Release 1.1.8
+[Full Changelog](https://github.com/camptocamp/puppet-accounts/compare/1.4.0...1.5.0)
 
-purge_ssh_keys was alwaus set to false...
-don't use purge_ssh_keys when puppet version < 3.6
-Update unit tests
-Update meta files
+## [1.4.0](https://github.com/camptocamp/puppet-accounts/tree/1.4.0) - 2015-07-02
 
-## 2015-01-05 - Release 1.1.7
+[Full Changelog](https://github.com/camptocamp/puppet-accounts/compare/1.3.5...1.4.0)
 
-Use CHANGELOG.md
-Simplify bundler cache in Travis CI
-Fix license name in metadata.json
+### Other
 
-## 2014-12-16 - Release 1.1.3
+- Allow setting default user shell [#17](https://github.com/camptocamp/puppet-accounts/pull/17) ([ckaenzig](https://github.com/ckaenzig))
 
-Fix exec resource name
-Fix unit tests
+## [1.3.5](https://github.com/camptocamp/puppet-accounts/tree/1.3.5) - 2015-06-26
 
-## 2014-11-17 - Release 1.1.2
+[Full Changelog](https://github.com/camptocamp/puppet-accounts/compare/1.3.4...1.3.5)
 
-Lint metadata.json
+## [1.3.4](https://github.com/camptocamp/puppet-accounts/tree/1.3.4) - 2015-05-28
 
-## 2014-11-04 - Release 1.1.1
+[Full Changelog](https://github.com/camptocamp/puppet-accounts/compare/1.3.3...1.3.4)
 
-Fix when no target
-Fix when purging with no target
-Inverse hashes order in merge so that we can override params in hiera
-Set user to root when using a target
-Allow string formating for target
-Forward authorized_keys_target and purge_ssh_keys when using usergroups
+## [1.3.3](https://github.com/camptocamp/puppet-accounts/tree/1.3.3) - 2015-05-26
 
-## 2014-10-28 - Release 1.1.0
+[Full Changelog](https://github.com/camptocamp/puppet-accounts/compare/1.3.2...1.3.3)
 
-Add purge-ssh-key support
-Remove puppet < 3.6 support
+## [1.3.2](https://github.com/camptocamp/puppet-accounts/tree/1.3.2) - 2015-05-26
 
-## 2014-10-28 - Release 1.0.2
+[Full Changelog](https://github.com/camptocamp/puppet-accounts/compare/1.3.1...1.3.2)
 
-Fix an issue when using ssh_authorized_key_title and usergroup
-Fix an issue when adding a user without ssh key defined
+## [1.3.1](https://github.com/camptocamp/puppet-accounts/tree/1.3.1) - 2015-05-25
 
-## 2014-10-20 - Release 1.0.1
+[Full Changelog](https://github.com/camptocamp/puppet-accounts/compare/1.3.0...1.3.1)
 
-Really setup automatic Forge release
+## [1.3.0](https://github.com/camptocamp/puppet-accounts/tree/1.3.0) - 2015-05-22
 
-## 2014-10-20 - Release 1.0.0
+[Full Changelog](https://github.com/camptocamp/puppet-accounts/compare/1.2.2...1.3.0)
 
-Setup automatic Forge releases
+### Other
+
+- Add support for user comment [#13](https://github.com/camptocamp/puppet-accounts/pull/13) ([mcanevet](https://github.com/mcanevet))
+- Fix User resource title when $user != $name [#12](https://github.com/camptocamp/puppet-accounts/pull/12) ([mcanevet](https://github.com/mcanevet))
+
+## [1.2.2](https://github.com/camptocamp/puppet-accounts/tree/1.2.2) - 2015-05-13
+
+[Full Changelog](https://github.com/camptocamp/puppet-accounts/compare/1.2.1...1.2.2)
+
+## [1.2.1](https://github.com/camptocamp/puppet-accounts/tree/1.2.1) - 2015-05-12
+
+[Full Changelog](https://github.com/camptocamp/puppet-accounts/compare/1.2.0...1.2.1)
+
+## [1.2.0](https://github.com/camptocamp/puppet-accounts/tree/1.2.0) - 2015-05-07
+
+[Full Changelog](https://github.com/camptocamp/puppet-accounts/compare/1.1.11...1.2.0)
+
+### Other
+
+- Default users 'membership' to 'inclusive' [#11](https://github.com/camptocamp/puppet-accounts/pull/11) ([ckaenzig](https://github.com/ckaenzig))
+
+## [1.1.11](https://github.com/camptocamp/puppet-accounts/tree/1.1.11) - 2015-04-27
+
+[Full Changelog](https://github.com/camptocamp/puppet-accounts/compare/1.1.10...1.1.11)
+
+### Other
+
+- making sure the file is owned by user and not root. +the file permissions are 600 and not 444 [#8](https://github.com/camptocamp/puppet-accounts/pull/8) ([pankajagarwal](https://github.com/pankajagarwal))
+
+## [1.1.10](https://github.com/camptocamp/puppet-accounts/tree/1.1.10) - 2015-04-03
+
+[Full Changelog](https://github.com/camptocamp/puppet-accounts/compare/1.1.9...1.1.10)
+
+## [1.1.9](https://github.com/camptocamp/puppet-accounts/tree/1.1.9) - 2015-03-24
+
+[Full Changelog](https://github.com/camptocamp/puppet-accounts/compare/1.1.8...1.1.9)
+
+## [1.1.8](https://github.com/camptocamp/puppet-accounts/tree/1.1.8) - 2015-02-24
+
+[Full Changelog](https://github.com/camptocamp/puppet-accounts/compare/1.1.7...1.1.8)
+
+### Other
+
+- Fix when using puppet < 3.6.0 [#5](https://github.com/camptocamp/puppet-accounts/pull/5) ([mcanevet](https://github.com/mcanevet))
+
+## [1.1.7](https://github.com/camptocamp/puppet-accounts/tree/1.1.7) - 2015-01-05
+
+[Full Changelog](https://github.com/camptocamp/puppet-accounts/compare/1.1.6...1.1.7)
+
+## [1.1.6](https://github.com/camptocamp/puppet-accounts/tree/1.1.6) - 2014-12-18
+
+[Full Changelog](https://github.com/camptocamp/puppet-accounts/compare/1.1.4...1.1.6)
+
+## [1.1.4](https://github.com/camptocamp/puppet-accounts/tree/1.1.4) - 2014-12-18
+
+[Full Changelog](https://github.com/camptocamp/puppet-accounts/compare/1.1.3...1.1.4)
+
+## [1.1.3](https://github.com/camptocamp/puppet-accounts/tree/1.1.3) - 2014-12-16
+
+[Full Changelog](https://github.com/camptocamp/puppet-accounts/compare/1.1.2...1.1.3)
+
+### Other
+
+- Change exec resource name when creating RSA private key [#3](https://github.com/camptocamp/puppet-accounts/pull/3) ([saimonn](https://github.com/saimonn))
+
+## [1.1.2](https://github.com/camptocamp/puppet-accounts/tree/1.1.2) - 2014-11-17
+
+[Full Changelog](https://github.com/camptocamp/puppet-accounts/compare/1.1.1...1.1.2)
+
+## [1.1.1](https://github.com/camptocamp/puppet-accounts/tree/1.1.1) - 2014-11-04
+
+[Full Changelog](https://github.com/camptocamp/puppet-accounts/compare/1.1.0...1.1.1)
+
+## [1.1.0](https://github.com/camptocamp/puppet-accounts/tree/1.1.0) - 2014-10-30
+
+[Full Changelog](https://github.com/camptocamp/puppet-accounts/compare/1.0.2...1.1.0)
+
+## [1.0.2](https://github.com/camptocamp/puppet-accounts/tree/1.0.2) - 2014-10-28
+
+[Full Changelog](https://github.com/camptocamp/puppet-accounts/compare/1.0.1...1.0.2)
+
+## [1.0.1](https://github.com/camptocamp/puppet-accounts/tree/1.0.1) - 2014-10-20
+
+[Full Changelog](https://github.com/camptocamp/puppet-accounts/compare/0.1.0...1.0.1)
+
+## [0.1.0](https://github.com/camptocamp/puppet-accounts/tree/0.1.0) - 2014-09-05
+
+[Full Changelog](https://github.com/camptocamp/puppet-accounts/compare/1a982d7ed18d357823a1e7ed2591ab6308692244...0.1.0)
