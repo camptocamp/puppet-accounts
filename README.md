@@ -77,46 +77,46 @@ Create a user for every user in `foo` usergroup and allow its public key.
 Module Parameters
 -----------------
 
-###`groups`
+### `groups` ###
 
 Hash of groups to create (passed to `create_resources`). Defaults to `{}`.
 
-###`groups_membership`
+### `groups_membership` ###
 
 Default value for the users' `membership` parameter. Refer to the Puppet documentation for more information.
 
-###`ssh_keys`
+### `ssh_keys` ###
 
 Hash of SSH public keys that can be assigned to users (see _Usage_ above).
 
-###`users`
+### `users` ###
 
 Hash of users (see _Usage_ above).
 
-###`usergroups`
+### `usergroups` ###
 
 Hash of user groups (see _Usage_ above).
 
-###`accounts`
+### `accounts` ###
 
 Hash of accounts to create (see _Usage_ above).
 
-###`forcelocal`
+### `forcelocal` ###
 
 Set the resource "user" parameter so that the users are not created/supressed in external user directories (i.e. LDAP). 
 
-###`start_uid`
+### `start_uid` ###
 
 Sets the lowest uid for non system users. This is a system setting and also affects users created outside of this module.
 
-###`start_gid`
+### `start_gid` ###
 
 Sets the lowest gid for non system groups. This is a system setting and also affects groups or users created outside of this module.
 
-###`purge_ssh_keys`
+### `purge_ssh_keys` ###
 
 Default value for users' `purge_ssh_keys` parameter. When `true` all SSH keys in a users `authorized_keys` file not managed by Puppet will be deleted. Defaults to `false`.
 
-###`shell`
+### `shell` ###
 
 Default value for users' `shell` parameter. Default is the system default (usually `/bin/sh`).
